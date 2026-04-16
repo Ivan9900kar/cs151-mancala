@@ -15,9 +15,4 @@ public class StoneContainer {
     public void addStone() {
         this.stones++;
     }
-    public int takeStones() {
-        int ret = getStones();
-        setStones(0);
-        return ret;
-    }
 }
