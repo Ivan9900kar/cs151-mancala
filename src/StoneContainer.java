@@ -1,7 +1,7 @@
 public class StoneContainer {
     private int stones;
     public StoneContainer() {
-        stones = 0;
+        this(0);
     }
     public StoneContainer(int stones) {
         this.stones = stones;
@@ -13,6 +13,9 @@ public class StoneContainer {
         this.stones = stones;
     }
     public void addStone() {
-        this.stones++;
+        stones++;
+    }
+    public void removeStone() {
+        if (stones > 0) stones--;
     }
 }

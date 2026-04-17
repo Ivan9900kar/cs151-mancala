@@ -1,6 +1,6 @@
 public class Pit extends StoneContainer {
     public Pit() {
-
+        super();
     }
     public Pit(int stones) {
         super(stones);
