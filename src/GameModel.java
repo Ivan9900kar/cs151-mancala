@@ -20,7 +20,7 @@ public class GameModel {
             this.turn = 0;
             this.col = 0;
             this.numStones = 0;
-            this.undosRemaining = 0;
+            this.undosRemaining = 3;
             this.moved = false;
         }
     }
