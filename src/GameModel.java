@@ -41,19 +41,31 @@ public class GameModel {
     public boolean attach(GameView view) {
         return views.add(view);
     }
+    public void startingStones(int numStones) {
+        for (StoneContainer[] row : containers) {
+            for (int i = 0; i < pits; i++) {
+                row[i].setStones(numStones);
+            }
+        }
+    }
+    public void updateView() {
+        for (GameView view : views) {
+            view.update();
+        }
+    }
     public void move(int col) {
         //check if already moved
         if (state.moved) return;
 
         //check validity of move (is there a stone to take)
         int row = state.turn;
-        int numStones = -1;
+        int numStones = 0;
         if (containers[row][col] instanceof Pit p) {
             numStones = p.takeStones();
             state.col = col;
             state.numStones = numStones;
         }
-        if (numStones == -1) return;
+        if (numStones == 0) return;
 
         //move the stones
         while (numStones > 0) {
@@ -69,17 +81,33 @@ public class GameModel {
             if (col == 0) row = (row + 1) % NUM_PLAYERS;
         }
 
+        //special move
+        if (row == state.turn) {
+            StoneContainer s = containers[row][col];
+            if (s.getStones() == 1 && s instanceof Pit p) {
+                Mancala m = (Mancala) containers[row][pits + 1];
+
+                //take from our side
+                m.addStones(p.takeStones());
+
+                //take from opponent's side
+                int oppCol = pits - 1 - col;
+                m.addStones(((Pit) containers[row][oppCol]).takeStones());
+            }
+        }
+
         state.moved = true;
     }
     public void confirm() {
+        if (!state.moved) return;
+
         state.turn = (state.turn + 1) % NUM_PLAYERS;
         state.undo = false;
         state.moved = false;
         state.undos = 0;
     }
     public void undo() {
-        state.undo = true;
-        state.moved = false;
+        if (state.undo) return;
 
         int row = state.turn;
         int col = state.col;
@@ -87,10 +115,10 @@ public class GameModel {
 
         //move the stones
         while (numStones > 0) {
-            //do not put into opponent's mancala
+            //do not remove from opponent's mancala
             if (!(row != state.turn && col == containers[row].length - 1)) {
-                //add to pit or own mancala
-                containers[row][col].addStone();
+                //remove from pit or own mancala
+                containers[row][col].removeStone();
                 numStones--;
             }
 
@@ -98,5 +126,8 @@ public class GameModel {
             col = (col + 1) % (pits + 1);
             if (col == 0) row = (row + 1) % NUM_PLAYERS;
         }
+
+        state.undo = true;
+        state.moved = false;
     }
 }
