@@ -138,7 +138,7 @@ public class GameModel {
      */
     public void undo() {
         // if player hasnt moved or instead used up all of their undos, return
-        if (!state.moved && state.undosRemaining < 1) return;
+        if (!state.moved || state.undosRemaining < 1) return;
 
         int row = state.turn;
         int col = state.col;
