@@ -4,5 +4,8 @@ public class GameView extends JPanel {
     public GameView(GameModel model) {
         this.model = model;
     }
+    public void update() {
+        
+    }
 
 }

@@ -1,21 +1,27 @@
 import java.util.ArrayList;
 
+/**
+ * GameModel is a class taking the role of the Model in MVC, and represents the state of the game. It holds all of the data of the game as well as the game logic.
+ */
 public class GameModel {
-    private final int NUM_PLAYERS = 2;
+    private final int NUM_PLAYERS = 2; // number of players in the game (currently needs to stay at 2)
     private StoneContainer[][] containers; // matrix to hold pits and mancala data (holding number of stones in each during game)
     private int numPits; // number of pits per player (excluding mancala)
     private ArrayList<GameView> views; // arraylist to hold views to update (listeners)
-    private GameState state;
+    private GameState state; // inner class object for additional data
 
     /**
-     * Class that holds data for tracking and preserving the state of the game.
+     * GameState is an inner class that holds additional data for tracking and preserving the state of the game, apart from the board itself.
      */
     private class GameState {
-        private int turn; //same as row
-        private int col;
-        private int numStones;
-        private int undosRemaining;
-        private boolean moved;
+        private int turn; // which player has the turn (also used as iterator / checker for row)
+        private int col; // iterator for column in matrix (which pit / mancala)
+        private int numStones; // how many stones are being moved
+        private int undosRemaining; // how many undos the current player has remaining
+        private boolean moved; // whether or not the player has already moved in their turn
+        /**
+         * GameState class default constructor
+         */
         private GameState() {
             this.turn = 0;
             this.col = 0;
@@ -25,8 +31,8 @@ public class GameModel {
         }
     }
     /**
-     * 
-     * @param pits
+     * GameMode class constructor, with specification on the number of pits each player will have in the game.
+     * @param numPits the number of pits for each player
      */
     public GameModel(int numPits) {
         this.numPits = numPits;
@@ -50,7 +56,7 @@ public class GameModel {
         }
     }
     /**
-     * Attach a view to to the model to be notified on any changes.
+     * Attaches a view to to the model to be notified on any changes.
      * @param view the view to be attached as a listener
      * @return {@code true} if the view has been successfully added
      */
@@ -58,7 +64,7 @@ public class GameModel {
         return views.add(view);
     }
     /**
-     * Sets each pit to start with the specified number of stones
+     * Sets each pit to start with the specified number of stones.
      * @param numStones the number of stones each pit will start out with
      */
     public void setStartingStones(int numStones) {
@@ -69,19 +75,19 @@ public class GameModel {
         }
     }
     /**
-     * 
+     * Updates any views (the GUI of the game) upon changes, which call this method.
      */
     public void updateView() {
         for (GameView view : views) {
-            //view.update();
+            view.update();
         }
     }
     /**
-     * 
+     * Moves the stones out of the specified pit counterclockwise on the board, per the core function of the game.
      * @param col the index of the pit chosen by the player to be the source of the move
      */
     public void move(int col) {
-        // check if already moved
+        // if already moved, return
         if (state.moved) return;
         // check validity of move (is there a stone to take)
         int row = state.turn;
@@ -101,20 +107,20 @@ public class GameModel {
                 containers[row][col].addStone();
                 numStones--;
             }
-            // traversal
+            // traversal of the board counterclockwise, looping through the matrix
             col = (col + 1) % (numPits + 1);
             if (col == 0) row = (row + 1) % NUM_PLAYERS;
         }
-        // special move
+        // special case where last stone is placed in empty pit on current player's side
         if (row == state.turn) {
             StoneContainer s = containers[row][col];
             if (s.getStones() == 1 && s instanceof Pit p) {
                 Mancala m = (Mancala) containers[row][containers[row].length - 1];
 
-                // take from our side and add to our mancala
+                // take from current player's side and add to their mancala
                 m.addStones(p.takeStones());
 
-                // take from opponent's side and add to our mancala
+                // take from opponent's side and add to current player's mancala
                 int oppCol = numPits - 1 - col;
                 m.addStones(((Pit) containers[row][oppCol]).takeStones());
             }
@@ -122,7 +128,7 @@ public class GameModel {
         state.moved = true;
     }
     /**
-     * 
+     * Confirms the move of the current player, ends turn and starts turn of next player
      */
     public void confirm() {
         // if player hasnt moved yet, return
@@ -134,7 +140,7 @@ public class GameModel {
         state.undosRemaining = 3;
     }
     /**
-     * 
+     * Undos the move done by the current player, setting the board back to how it was before the move.
      */
     public void undo() {
         // if player hasnt moved or instead used up all of their undos, return
@@ -146,9 +152,9 @@ public class GameModel {
 
         // remove stones that were added
         while (numStones > 0) {
-            //do not remove from opponent's mancala
+            // do not remove from opponent's mancala
             if (!(row != state.turn && col == containers[row].length - 1)) {
-                //remove from pit or own mancala
+                // remove from pit or current player's mancala
                 containers[row][col].removeStone();
                 numStones--;
             }
@@ -157,8 +163,7 @@ public class GameModel {
             col = (col + 1) % (numPits + 1);
             if (col == 0) row = (row + 1) % NUM_PLAYERS;
         }
-        // !!! CONFIRM VALIDITY OF THIS !!!
-        // add back stones to original pit
+        // add back stones to original pit (where the move had began)
         containers[row][col].setStones(state.numStones);
 
         state.moved = false;
