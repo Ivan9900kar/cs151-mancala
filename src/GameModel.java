@@ -4,10 +4,11 @@ import java.util.ArrayList;
  * GameModel is a class taking the role of the Model in MVC, and represents the state of the game. It holds all of the data of the game as well as the game logic.
  */
 public class GameModel {
-    private final int NUM_PLAYERS = 2; // number of players in the game (currently needs to stay at 2)
+    public final int NUM_PLAYERS = 2; // number of players in the game (currently needs to stay at 2)
     private StoneContainer[][] containers; // matrix to hold pits and mancala data (holding number of stones in each during game)
     private int numPits; // number of pits per player (excluding mancala)
     private ArrayList<GameView> views; // arraylist to hold views to update (listeners)
+    private GameView currentView;
     private GameState state; // inner class object for additional data
 
     /**
@@ -40,6 +41,7 @@ public class GameModel {
         initContainers();
         this.views = new ArrayList<>();
         this.state = new GameState();
+        defaultView();
     }
     /**
      * Initializes the pits and mancalas.
@@ -54,6 +56,36 @@ public class GameModel {
             // for the mancala
             containers[i][containers[i].length - 1] = new Mancala();
         }
+    }
+    private void defaultView() {
+        GameView view = new GameView(this);
+        this.currentView = view;
+        attach(view);
+    }
+
+    /**
+     * Getter method for the number of pits
+     * @return
+     */
+    public int getNumPits() {
+        return this.numPits;
+    }
+    /**
+     * Getter method to access StoneContainer data
+     * @return
+     */
+    public StoneContainer[][] getContainers() {
+        return this.containers;
+    }
+    public void setCurrentView() {
+
+    }
+    /**
+     * Getter method to access current displayed view
+     * @return
+     */
+    public GameView getCurrentView() {
+        return this.currentView;
     }
     /**
      * Attaches a view to to the model to be notified on any changes.
@@ -168,5 +200,7 @@ public class GameModel {
 
         state.moved = false;
         state.undosRemaining--;
+
+        updateView();
     }
 }
