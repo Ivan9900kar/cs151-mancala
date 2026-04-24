@@ -34,6 +34,7 @@ public class GameView extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         draw(g2);
     }
+
     public void draw(Graphics2D g2) {
         StoneContainer[][] containers = model.getContainers();
         for (int row = 0; row < containers.length; row++) {
