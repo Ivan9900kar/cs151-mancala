@@ -12,5 +12,6 @@ public class MancalaTest {
         //frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
     }
 }

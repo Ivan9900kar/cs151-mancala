@@ -48,7 +48,7 @@ public class Pit extends StoneContainer {
 
         g2.setFont(new Font("SansSerif", Font.BOLD, 18));
 
-        char letter = (char) ('A' + row);
+        char letter = (char) ('B' - row);
         String name = "";
         name += letter;
         name += col + 1;

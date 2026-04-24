@@ -59,7 +59,9 @@ public class GameModel {
                 containers[i][j] = p;
             }
             // for the mancala
-            containers[i][containers[i].length - 1] = new Mancala();
+            Mancala m = new Mancala();
+            m.setRow(i); 
+            containers[i][containers[i].length - 1] = m;
         }
     }
     private void defaultView() {
