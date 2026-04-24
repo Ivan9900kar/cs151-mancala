@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
 public abstract class StoneContainer {
-    final double STONE_SIZE = 25;
     private int stones;
     private double x;
     private double y;
@@ -46,14 +45,7 @@ public abstract class StoneContainer {
     public void setY(double y) {
         this.y = y;
     }
-    public abstract void draw(Graphics2D g2);
-    public void drawStones(Graphics2D g2) {
-        int numStones = getStones();
-        for (int i = 0; i < numStones; i++) {
-            double x = getX() + 20 + (i * 4);
-            double y = getY() + 20 + (i * 4);
-            Ellipse2D stone = new Ellipse2D.Double(x, y, STONE_SIZE, STONE_SIZE);
-            g2.draw(stone);
-        }
+    public void draw(Graphics2D g2) {
+        g2.drawString("" + getStones(), (int) (getX() + 50), (int) (getY() + 50));
     }
 }

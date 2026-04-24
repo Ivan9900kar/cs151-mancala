@@ -42,11 +42,16 @@ public class Pit extends StoneContainer {
         return ret;
     }
     public void draw(Graphics2D g2) {
+        super.draw(g2);
         Ellipse2D pit = new Ellipse2D.Double(getX(), getY(), ICON_SIZE, ICON_SIZE);
         g2.draw(pit);
-        drawStones(g2);
 
         g2.setFont(new Font("SansSerif", Font.BOLD, 18));
-        g2.drawString("Pit", (int) getX() + 34, (int) getY());
+
+        char letter = (char) ('A' + row);
+        String name = "";
+        name += letter;
+        name += col + 1;
+        g2.drawString(name, (int) getX() + 34, (int) getY());
     }
 }

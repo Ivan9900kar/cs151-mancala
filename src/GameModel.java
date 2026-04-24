@@ -54,7 +54,8 @@ public class GameModel {
             for (int j = 0; j < numPits; j++) {
                 Pit p = new Pit();
                 p.setRow(i);
-                p.setCol(j);
+                if (i == 0) p.setCol(numPits - j - 1);
+                else p.setCol(j);
                 containers[i][j] = p;
             }
             // for the mancala
