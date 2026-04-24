@@ -45,5 +45,8 @@ public class Pit extends StoneContainer {
         Ellipse2D pit = new Ellipse2D.Double(getX(), getY(), ICON_SIZE, ICON_SIZE);
         g2.draw(pit);
         drawStones(g2);
+
+        g2.setFont(new Font("SansSerif", Font.BOLD, 18));
+        g2.drawString("Pit", (int) getX() + 34, (int) getY());
     }
 }
