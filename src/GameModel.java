@@ -42,6 +42,7 @@ public class GameModel {
         this.views = new ArrayList<>();
         this.state = new GameState();
         defaultView();
+        updateView();
     }
     /**
      * Initializes the pits and mancalas.
@@ -51,7 +52,10 @@ public class GameModel {
         for (int i = 0; i < containers.length; i++) {
             // for each pit  
             for (int j = 0; j < numPits; j++) {
-                containers[i][j] = new Pit();
+                Pit p = new Pit();
+                p.setRow(i);
+                p.setCol(j);
+                containers[i][j] = p;
             }
             // for the mancala
             containers[i][containers[i].length - 1] = new Mancala();
