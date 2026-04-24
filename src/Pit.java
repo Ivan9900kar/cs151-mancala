@@ -43,12 +43,11 @@ public class Pit extends StoneContainer {
     }
     public void draw(Graphics2D g2) {
         super.draw(g2);
+        g2.setFont(new Font("SansSerif", Font.BOLD, 18));
         Ellipse2D pit = new Ellipse2D.Double(getX(), getY(), ICON_SIZE, ICON_SIZE);
         g2.draw(pit);
 
-        g2.setFont(new Font("SansSerif", Font.BOLD, 18));
-
-        char letter = (char) ('A' + row);
+        char letter = (char) ('B' - row);
         String name = "";
         name += letter;
         name += col + 1;
