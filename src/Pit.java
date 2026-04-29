@@ -43,7 +43,7 @@ public class Pit extends StoneContainer {
     }
     public void draw(Graphics2D g2) {
         super.draw(g2);
-        
+
         Ellipse2D pit = new Ellipse2D.Double(getX(), getY(), ICON_SIZE, ICON_SIZE);
         g2.draw(pit);
 
@@ -51,6 +51,6 @@ public class Pit extends StoneContainer {
         String name = "";
         name += letter;
         name += col + 1;
-        g2.drawString(name, (int) getX() + 34, (int) getY());
+        g2.drawString(name, (int) getX() + 33, (int) getY() - 5);
     }
 }
