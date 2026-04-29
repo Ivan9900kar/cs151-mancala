@@ -24,14 +24,23 @@ public class Mancala extends StoneContainer {
         setStones(getStones() + stones);
     }
     public void draw(Graphics2D g2) {
-        super.draw(g2);
 
         RoundRectangle2D mancala = new RoundRectangle2D.Double(getX(), getY(), ICON_WIDTH, ICON_HEIGHT, ICON_SEMI, ICON_SEMI);
+
+        // mancala color setup
+        Color temp = g2.getColor();
+        g2.setColor(Color.decode("#dcbc97"));
+        g2.fill(mancala);
+        g2.setColor(temp);
+
         g2.draw(mancala);
         
+        // mancala label
         char letter = (char) ('B' - row);
         String label = "Mancala " + letter;
         g2.drawString(label, (int)(getX() - 18), (int)(getY() - 10));
 
+        // draw number of stones in mancala
+        super.draw(g2);
     }
 }

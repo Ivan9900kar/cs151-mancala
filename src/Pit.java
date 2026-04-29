@@ -42,15 +42,25 @@ public class Pit extends StoneContainer {
         return ret;
     }
     public void draw(Graphics2D g2) {
-        super.draw(g2);
 
         Ellipse2D pit = new Ellipse2D.Double(getX(), getY(), ICON_SIZE, ICON_SIZE);
+
+        // pit color setup
+        Color temp = g2.getColor();
+        g2.setColor(Color.decode("#dcbc97"));
+        g2.fill(pit);
+        g2.setColor(temp);
+
         g2.draw(pit);
 
+        // pit label
         char letter = (char) ('B' - row);
         String name = "";
         name += letter;
         name += col + 1;
         g2.drawString(name, (int) getX() + 33, (int) getY() - 5);
+
+        // draw number of stones in pit
+        super.draw(g2);
     }
 }

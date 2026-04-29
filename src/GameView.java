@@ -42,8 +42,16 @@ public class GameView extends JPanel {
     public void draw(Graphics2D g2) {
         // could be part of a strategy pattern
         g2.setFont(new Font("SansSerif", Font.BOLD, 24));
+        g2.setStroke(new BasicStroke(2));
 
-        RoundRectangle2D board = new RoundRectangle2D.Double(getX() + xOffset, getY() + yOffset, 1250, 550, 100, 100);
+        RoundRectangle2D board = new RoundRectangle2D.Double(getX() + xOffset, getY() + yOffset, 1250, 550, 150, 150);
+
+        // color
+        Color temp = g2.getColor();
+        g2.setColor(Color.decode("#a06545"));
+        g2.fill(board);
+        g2.setColor(temp);
+
         g2.draw(board);
 
         StoneContainer[][] containers = model.getContainers();
