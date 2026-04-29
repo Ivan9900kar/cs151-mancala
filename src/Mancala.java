@@ -25,10 +25,9 @@ public class Mancala extends StoneContainer {
     }
     public void draw(Graphics2D g2) {
         super.draw(g2);
+        
         RoundRectangle2D mancala = new RoundRectangle2D.Double(getX(), getY(), ICON_WIDTH, ICON_HEIGHT, ICON_SEMI, ICON_SEMI);
         g2.draw(mancala);
-
-        g2.setFont(new Font("SansSerif", Font.BOLD, 18));
         
         char letter = (char) ('B' - row);
         String label = "Mancala " + letter;

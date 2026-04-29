@@ -32,6 +32,8 @@ public class GameView extends JPanel {
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
+        // could be part of a strategy pattern
+        g2.setFont(new Font("SansSerif", Font.BOLD, 18));
         draw(g2);
     }
 
