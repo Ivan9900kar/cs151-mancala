@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
+import java.awt.*;
 
 public class GameController extends JPanel {
     private GameModel model;
@@ -9,11 +10,13 @@ public class GameController extends JPanel {
     }
     private void addButtons() {
         JButton confirm = new JButton("Confirm Move");
+        confirm.setPreferredSize(new Dimension(200, 50));
         confirm.addActionListener(e -> model.confirm());
         add(confirm);
 
         JButton undo = new JButton("Undo Move");
-        confirm.addActionListener(e -> model.undo());
+        undo.setPreferredSize(new Dimension(200, 50));
+        undo.addActionListener(e -> model.undo());
         add(undo);
     }
 }

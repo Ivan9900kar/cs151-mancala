@@ -3,6 +3,7 @@ import java.awt.geom.Ellipse2D;
 
 public class Pit extends StoneContainer {
     final double ICON_SIZE = 100;
+//    PitStrategy strategy;
     private int row;
     private int col;
     /**
@@ -42,7 +43,7 @@ public class Pit extends StoneContainer {
         return ret;
     }
     public void draw(Graphics2D g2) {
-
+//        strategy.draw();
         Ellipse2D pit = new Ellipse2D.Double(getX(), getY(), ICON_SIZE, ICON_SIZE);
 
         // pit color setup
@@ -62,5 +63,11 @@ public class Pit extends StoneContainer {
 
         // draw number of stones in pit
         super.draw(g2);
+    }
+
+    public boolean contains(Point p) {
+        double x = getX();
+        double y = getY();
+        return p.x >= x && p.x <= x + 100 && p.y >= y && p.y <= y + 100;
     }
 }

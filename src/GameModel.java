@@ -14,7 +14,7 @@ public class GameModel {
     /**
      * GameState is an inner class that holds additional data for tracking and preserving the state of the game, apart from the board itself.
      */
-    private class GameState {
+    protected class GameState {
         private int turn; // which player has the turn (also used as iterator / checker for row)
         private int col; // iterator for column in matrix (which pit / mancala)
         private int numStones; // how many stones are being moved
@@ -29,6 +29,15 @@ public class GameModel {
             this.numStones = 0;
             this.undosRemaining = 3;
             this.moved = false;
+        }
+        public int getTurn() {
+            return this.turn;
+        }
+        public int getUndosRemaining() {
+            return this.undosRemaining;
+        }
+        public boolean isMoved() {
+            return this.moved;
         }
     }
     /**
@@ -69,7 +78,12 @@ public class GameModel {
         this.currentView = view;
         attach(view);
     }
-
+    /**
+     * Getter method for the GameState
+     */
+    public GameState getState() {
+        return this.state;
+    }
     /**
      * Getter method for the number of pits
      * @return
@@ -84,6 +98,10 @@ public class GameModel {
     public StoneContainer[][] getContainers() {
         return this.containers;
     }
+
+    /**
+     * To be implemented
+     */
     public void setCurrentView() {
 
     }
@@ -125,11 +143,12 @@ public class GameModel {
      * Moves the stones out of the specified pit counterclockwise on the board, per the core function of the game.
      * @param col the index of the pit chosen by the player to be the source of the move
      */
-    public void move(int col) {
+    public void move(int row, int col) {
+        // if clicking the opponent's Pit, disallow and return (do nothing)
+        if (row != state.turn) return;
         // if already moved, return
         if (state.moved) return;
         // check validity of move (is there a stone to take)
-        int row = state.turn;
         int numStones = 0;
         if (containers[row][col] instanceof Pit p) {
             numStones = p.takeStones();
@@ -140,15 +159,15 @@ public class GameModel {
         if (numStones == 0) return;
         // move the stones
         while (numStones > 0) {
+            // traversal of the board counterclockwise, looping through the matrix
+            col = (col + 1) % (numPits + 1);
+            if (col == 0) row = (row + 1) % NUM_PLAYERS;
             // do not put into opponent's mancala
             if (!(row != state.turn && col == containers[row].length - 1)) {
                 // add to pit or own mancala
                 containers[row][col].addStone();
                 numStones--;
             }
-            // traversal of the board counterclockwise, looping through the matrix
-            col = (col + 1) % (numPits + 1);
-            if (col == 0) row = (row + 1) % NUM_PLAYERS;
         }
         // special case where last stone is placed in empty pit on current player's side
         if (row == state.turn) {
@@ -165,24 +184,28 @@ public class GameModel {
             }
         }
         state.moved = true;
+
+        updateView();
     }
     /**
      * Confirms the move of the current player, ends turn and starts turn of next player
      */
     public void confirm() {
-        // if player hasnt moved yet, return
+        // if player hasn't moved yet, return
         if (!state.moved) return;
         // turn over to next player
         state.turn = (state.turn + 1) % NUM_PLAYERS;
         // reset 
         state.moved = false;
         state.undosRemaining = 3;
+
+        updateView();
     }
     /**
      * Undos the move done by the current player, setting the board back to how it was before the move.
      */
     public void undo() {
-        // if player hasnt moved or instead used up all of their undos, return
+        // if player hasn't moved or instead used up all of their undos, return
         if (!state.moved || state.undosRemaining < 1) return;
 
         int row = state.turn;
