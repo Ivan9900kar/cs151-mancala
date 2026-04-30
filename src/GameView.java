@@ -59,12 +59,12 @@ public class GameView extends JPanel {
             for (int col = 0; col < containers[row].length; col++) {
                 StoneContainer container = containers[row][col];
                 double x;
-                if (col == 0) x = getX() + 50 + 150;
-                else if (row == 0 && col == containers[row].length - 1) x = getX() + 50;
-                else x = getX() + 50 + (150 * (col + 1));
+                if (row == 0) x = getX() + 50 + (150 * (col + 1));
+                else x = getX() + 50 + (150 * ((model.getNumPits() - 1 - col) + 1));
                 double y;
                 if (col == containers[row].length - 1) y = getY() + 50;
-                else y = getY() + 150 + (150 * row);
+                else if (row == 0) y = getY() + 300;
+                else y = getY() + 150;
                 container.setX(x + xOffset);
                 container.setY(y + yOffset);
             }

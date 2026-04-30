@@ -16,17 +16,21 @@ public class GameModel {
      */
     protected class GameState {
         private int turn; // which player has the turn (also used as iterator / checker for row)
-        private int col; // iterator for column in matrix (which pit / mancala)
+        private int startCol; // iterator for column in matrix (which pit / mancala)
+        private int endCol; // tracking where iteration ends
         private int numStones; // how many stones are being moved
+        private int specialSteal; //how stones did the respective player's mancala have before the turn
         private int undosRemaining; // how many undos the current player has remaining
-        private boolean moved; // whether or not the player has already moved in their turn
+        private boolean moved; // whether the player has already moved in their turn
         /**
          * GameState class default constructor
          */
         private GameState() {
             this.turn = 0;
-            this.col = 0;
+            this.startCol = 0;
+            this.endCol = 0;
             this.numStones = 0;
+            this.specialSteal = 0;
             this.undosRemaining = 3;
             this.moved = false;
         }
@@ -63,8 +67,7 @@ public class GameModel {
             for (int j = 0; j < numPits; j++) {
                 Pit p = new Pit();
                 p.setRow(i);
-                if (i == 0) p.setCol(numPits - j - 1);
-                else p.setCol(j);
+                p.setCol(j);
                 containers[i][j] = p;
             }
             // for the mancala
@@ -148,14 +151,16 @@ public class GameModel {
         if (row != state.turn) return;
         // if already moved, return
         if (state.moved) return;
+
         // check validity of move (is there a stone to take)
         int numStones = 0;
+
         if (containers[row][col] instanceof Pit p) {
             numStones = p.takeStones();
-            state.col = col;
+            state.startCol = col;
             state.numStones = numStones;
         }
-        // if a mancala or number of stones in pit was 0, return
+        // if the number of stones in pit was 0, return
         if (numStones == 0) return;
         // move the stones
         while (numStones > 0) {
@@ -169,8 +174,11 @@ public class GameModel {
                 numStones--;
             }
         }
+
+        state.endCol = col;
+
         // special case where last stone is placed in empty pit on current player's side
-        if (row == state.turn) {
+        if (row == state.turn && col != containers[row].length - 1) {
             StoneContainer s = containers[row][col];
             if (s.getStones() == 1 && s instanceof Pit p) {
                 Mancala m = (Mancala) containers[row][containers[row].length - 1];
@@ -180,7 +188,8 @@ public class GameModel {
 
                 // take from opponent's side and add to current player's mancala
                 int oppCol = numPits - 1 - col;
-                m.addStones(((Pit) containers[row][oppCol]).takeStones());
+                state.specialSteal = ((Pit) containers[(row + 1) % NUM_PLAYERS][oppCol]).takeStones();
+                m.addStones(state.specialSteal);
             }
         }
         state.moved = true;
@@ -193,11 +202,14 @@ public class GameModel {
     public void confirm() {
         // if player hasn't moved yet, return
         if (!state.moved) return;
-        // turn over to next player
-        state.turn = (state.turn + 1) % NUM_PLAYERS;
-        // reset 
+        //reset move status
         state.moved = false;
-        state.undosRemaining = 3;
+
+        // turn over to next player if not gaining another turn
+        if (state.endCol != containers[state.turn].length - 1) {
+            state.turn = (state.turn + 1) % NUM_PLAYERS;
+            state.undosRemaining = 3;
+        }
 
         updateView();
     }
@@ -209,24 +221,33 @@ public class GameModel {
         if (!state.moved || state.undosRemaining < 1) return;
 
         int row = state.turn;
-        int col = state.col;
+        int col = state.startCol;
         int numStones = state.numStones;
+
+        // add back stones to original pit (where the move had began)
+        containers[row][col].setStones(state.numStones);
 
         // remove stones that were added
         while (numStones > 0) {
-            // do not remove from opponent's mancala
-            if (!(row != state.turn && col == containers[row].length - 1)) {
-                // remove from pit or current player's mancala
-                containers[row][col].removeStone();
-                numStones--;
-            }
-
             //traversal
             col = (col + 1) % (numPits + 1);
             if (col == 0) row = (row + 1) % NUM_PLAYERS;
+
+            // do not remove from opponent's mancala
+            if (!(row != state.turn && col == containers[row].length - 1)) {
+                StoneContainer container = containers[row][col];
+                // remove from pit or current player's mancala
+                // if removing from a pit with nothing, indicates it was the special move case
+                if (container.getStones() == 0 && row == state.turn) {
+                    Mancala m = (Mancala) containers[state.turn][containers[row].length - 1];
+                    m.addStones(-1);
+                    containers[(state.turn + 1) % NUM_PLAYERS][numPits - 1 - col].setStones(state.specialSteal - 1);
+                    m.addStones(-state.specialSteal);
+                }
+                container.removeStone(); //on special case, removing from an empty pit does nothing (deferral)
+                numStones--;
+            }
         }
-        // add back stones to original pit (where the move had began)
-        containers[row][col].setStones(state.numStones);
 
         state.moved = false;
         state.undosRemaining--;

@@ -55,7 +55,7 @@ public class Pit extends StoneContainer {
         g2.draw(pit);
 
         // pit label
-        char letter = (char) ('B' - row);
+        char letter = (char) ('A' + row);
         String name = "";
         name += letter;
         name += col + 1;

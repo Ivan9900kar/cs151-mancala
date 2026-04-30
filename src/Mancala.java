@@ -36,7 +36,7 @@ public class Mancala extends StoneContainer {
         g2.draw(mancala);
         
         // mancala label
-        char letter = (char) ('B' - row);
+        char letter = (char) ('A' + row);
         String label = "Mancala " + letter;
         g2.drawString(label, (int)(getX() - 18), (int)(getY() - 10));
 
