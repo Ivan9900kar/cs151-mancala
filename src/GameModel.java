@@ -237,11 +237,13 @@ public class GameModel {
             if (!(row != state.turn && col == containers[row].length - 1)) {
                 StoneContainer container = containers[row][col];
                 // remove from pit or current player's mancala
-                // if removing from a pit with nothing, indicates it was the special move case
+
+                // if removing from a pit with nothing on the player's side, indicates it was the special move case
                 if (container.getStones() == 0 && row == state.turn) {
                     Mancala m = (Mancala) containers[state.turn][containers[row].length - 1];
-                    m.addStones(-1);
-                    containers[(state.turn + 1) % NUM_PLAYERS][numPits - 1 - col].setStones(state.specialSteal - 1);
+                    container.addStone();
+                    m.removeStone();
+                    containers[(state.turn + 1) % NUM_PLAYERS][numPits - 1 - col].addStones(state.specialSteal);
                     m.addStones(-state.specialSteal);
                 }
                 container.removeStone(); //on special case, removing from an empty pit does nothing (deferral)

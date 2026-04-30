@@ -19,10 +19,6 @@ public class Mancala extends StoneContainer {
     public void setRow(int row) { 
         this.row = row;
     }
-
-    public void addStones(int stones) {
-        setStones(getStones() + stones);
-    }
     public void draw(Graphics2D g2) {
 
         RoundRectangle2D mancala = new RoundRectangle2D.Double(getX(), getY(), ICON_WIDTH, ICON_HEIGHT, ICON_SEMI, ICON_SEMI);

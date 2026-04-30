@@ -24,8 +24,11 @@ public abstract class StoneContainer {
     public void addStone() {
         stones++;
     }
+    public void addStones(int stones) {
+        setStones(getStones() + stones);
+    }
     public void removeStone() {
-        if (stones > 0) stones--;
+        stones--;
     }
     public String getName() {
         return this.name;
