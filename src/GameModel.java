@@ -10,10 +10,9 @@ public class GameModel {
     private ArrayList<GameView> views; // arraylist to hold views to update (listeners)
     private GameView currentView;
     private GameState state; // inner class object for additional data
-    public enum MOVE_TYPE {
+    public enum MOVE_TYPE { // enum for the type of move completed by the player
         NEW_TURN,NORMAL, FREE_TURN, CAPTURE, UNDO, 
     }
-
     /**
      * GameState is an inner class that holds additional data for tracking and preserving the state of the game, apart from the board itself.
      */
@@ -25,9 +24,9 @@ public class GameModel {
         private int specialSteal; //how stones did the respective player's mancala have before the turn
         private int undosRemaining; // how many undos the current player has remaining
         private boolean moved; // whether the player has already moved in their turn
-        private MOVE_TYPE moveType; // what type of move the player has made (for tracking free turns, captures, invalid moves, and undos)
+        private MOVE_TYPE moveType; // what type of move the player has made
         /**
-         * GameState class default constructor
+         * GameState class default constructor.
          */
         private GameState() {
             this.turn = 0;
@@ -56,7 +55,7 @@ public class GameModel {
         }
     }
     /**
-     * GameMode class constructor, with specification on the number of pits each player will have in the game.
+     * GameModel class constructor, with specification on the number of pits each player will have in the game.
      * @param numPits the number of pits for each player
      */
     public GameModel(int numPits) {
@@ -69,7 +68,7 @@ public class GameModel {
         updateView();
     }
     /**
-     * Initializes the pits and mancalas.
+     * Initializes the pits and mancalas in the containers matrix.
      */
     private void initContainers() {
         // for each player
@@ -87,32 +86,34 @@ public class GameModel {
             containers[i][containers[i].length - 1] = m;
         }
     }
+    /**
+     * Creates a default view object and attaches it.
+     */
     private void defaultView() {
         GameView view = new GameView(this);
         this.currentView = view;
         attach(view);
     }
     /**
-     * Getter method for the GameState
+     * Getter method for the GameState object.
      */
     public GameState getState() {
         return this.state;
     }
     /**
-     * Getter method for the number of pits
+     * Getter method for the number of pits.
      * @return
      */
     public int getNumPits() {
         return this.numPits;
     }
     /**
-     * Getter method to access StoneContainer data
+     * Getter method to access StoneContainer data.
      * @return
      */
     public StoneContainer[][] getContainers() {
         return this.containers;
     }
-
     /**
      * To be implemented
      */
@@ -120,7 +121,7 @@ public class GameModel {
 
     }
     /**
-     * Getter method to access current displayed view
+     * Getter method to access current displayed view.
      * @return
      */
     public GameView getCurrentView() {
@@ -154,7 +155,7 @@ public class GameModel {
         }
     }
     /**
-     * Moves the stones out of the specified pit counterclockwise on the board, per the core function of the game.
+     * Moves the stones out of the specified pit and places them at each subsequent pit or own mancala counterclockwise on the board.
      * @param col the index of the pit chosen by the player to be the source of the move
      */
     public void move(int row, int col) {
@@ -223,6 +224,18 @@ public class GameModel {
         // if player hasn't moved yet, exit
         if (!state.moved) return;
 
+        // check if game end (when all of a player's pits are empty)
+        for (int i = 0; i < NUM_PLAYERS; i++) {
+            int sum = 0;
+            for (int j = 0; j < numPits; j++) {
+                sum += containers[i][j].getStones();
+            }
+            if (sum == 0) {
+                gameEnd();
+                break;
+            }
+        }
+
         // reset move state
         state.moved = false;
         state.moveType = MOVE_TYPE.NEW_TURN;
@@ -278,5 +291,25 @@ public class GameModel {
         state.undosRemaining--;
 
         updateView();
+    }
+    /**
+     * 
+     */
+    public void gameEnd() {
+        int[] sum = new int[NUM_PLAYERS];
+        for (int i = 0; i < NUM_PLAYERS; i++) {
+            for (int j = 0; j < numPits + 1; j++) {
+                sum[i] += containers[i][j].getStones();
+            }
+        }
+        int current = 0;
+        int currentRow = 0;
+        for (int i = 0; i < NUM_PLAYERS; i++) {
+            current = Math.max(current, sum[i]);
+            if (current == sum[i]) {
+                currentRow = i; 
+            }
+        }
+        //endMenu();
     }
 }
