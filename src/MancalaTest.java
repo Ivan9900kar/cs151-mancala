@@ -14,8 +14,7 @@ public class MancalaTest {
         GameView view = model.getCurrentView();
         frame.add(view, BorderLayout.CENTER);
 
-        GameController controller = new GameController(model);
-        frame.add(controller, BorderLayout.SOUTH);
+        new GameController(model, view);
 
         //frame.pack();
         frame.setVisible(true);

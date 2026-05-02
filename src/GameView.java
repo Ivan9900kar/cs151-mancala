@@ -1,8 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 
 public class GameView extends JPanel {
@@ -13,26 +11,21 @@ public class GameView extends JPanel {
     private JLabel undosRemaining;
     private final double xOffset = 100;
     private final double yOffset = 100;
+
+    private final JButton confirm;
+    private final JButton undo;
+
     public GameView(GameModel model) {
         this.model = model;
-        gameState();
+        this.confirm = new JButton("Confirm Move");
+        this.undo = new JButton("Undo Move");
+        setLayout(new BorderLayout());
+        addGameState();
+        addButtons();
         setPositions();
-        addMouseListener(new MyMouseListener());
     }
-    private class MyMouseListener extends MouseAdapter {
-        @Override
-        public void mouseClicked(MouseEvent event) {
-            StoneContainer[][] containers = model.getContainers();
-            for (StoneContainer[] row : containers) {
-                for (StoneContainer col : row) {
-                    if (col instanceof Pit pit && pit.contains(event.getPoint())) {
-                        model.move(pit.getRow(), pit.getCol());
-                    }
-                }
-            }
-        }
-    }
-    private void gameState() {
+
+    private void addGameState() {
         this.state = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0; // fixed column
@@ -53,6 +46,24 @@ public class GameView extends JPanel {
         undosRemaining.setFont(font);
         state.add(undosRemaining, gbc);
     }
+
+    private void addButtons() {
+        JPanel buttonPanel = new JPanel();
+        confirm.setPreferredSize(new Dimension(200, 50));
+        undo.setPreferredSize(new Dimension(200, 50));
+        buttonPanel.add(confirm);
+        buttonPanel.add(undo);
+        add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    public void addConfirmActionListener(ActionListener listener) {
+        confirm.addActionListener(listener);
+    }
+
+    public void addUndoActionListener(ActionListener listener) {
+        undo.addActionListener(listener);
+    }
+
     private void setPositions() {
         StoneContainer[][] containers = model.getContainers();
         for (int row = 0; row < containers.length; row++) {
@@ -70,11 +81,11 @@ public class GameView extends JPanel {
             }
         }
     }
+
     public void update() {
         GameModel.GameState gameState = model.getState();
         int turn = gameState.getTurn();
         int undosRemaining = gameState.getUndosRemaining();
-        //boolean moved = gameState.isMoved();
         char player = (char) ('A' + turn);
 
         this.turn.setText("Player " + player + "'s turn");
@@ -97,9 +108,12 @@ public class GameView extends JPanel {
                 this.moved.setText("Last move undone. Player " + player + " has not moved yet.");
                 break;
         }
-
+        boolean moved = gameState.isMoved();
+        confirm.setEnabled(moved);
+        undo.setEnabled(moved && gameState.getUndosRemaining() > 0);
         repaint();
     }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

@@ -1,22 +1,31 @@
-import javax.swing.*;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class GameController extends JPanel {
-    private GameModel model;
-    public GameController(GameModel model) {
+public class GameController {
+    private final GameModel model;
+    //private final GameView view;
+
+    public GameController(GameModel model, GameView view) {
         this.model = model;
-        addButtons();
-    }
-    private void addButtons() {
-        JButton confirm = new JButton("Confirm Move");
-        confirm.setPreferredSize(new Dimension(200, 50));
-        confirm.addActionListener(e -> model.confirm());
-        add(confirm);
+        //this.view = view;
+        view.addConfirmActionListener(e -> model.confirm());
+        view.addUndoActionListener(e -> model.undo());
+        view.addMouseListener(new MyMouseListener());
+        view.update();
 
-        JButton undo = new JButton("Undo Move");
-        undo.setPreferredSize(new Dimension(200, 50));
-        undo.addActionListener(e -> model.undo());
-        add(undo);
+    }
+
+    private class MyMouseListener extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent event) {
+            StoneContainer[][] containers = model.getContainers();
+            for (StoneContainer[] row : containers) {
+                for (StoneContainer col : row) {
+                    if (col instanceof Pit pit && pit.contains(event.getPoint())) {
+                        model.move(pit.getRow(), pit.getCol());
+                    }
+                }
+            }
+        }
     }
 }
