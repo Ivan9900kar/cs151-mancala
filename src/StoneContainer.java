@@ -1,6 +1,4 @@
-import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 
 public abstract class StoneContainer {
     private int stones;

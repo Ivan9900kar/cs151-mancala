@@ -5,63 +5,68 @@ import java.awt.geom.RoundRectangle2D;
 
 public class GameView extends JPanel {
     private GameModel model;
-    private JPanel state;
-    private JLabel moved;
-    private JLabel turn;
-    private JLabel undosRemaining;
+    private JPanel statePanel;
+    private JLabel movedLabel;
+    private JLabel turnLabel;
+    private JLabel undosRemainingLabel;
+    private final JButton confirmButton;
+    private final JButton undoButton;
     private final double xOffset = 100;
     private final double yOffset = 100;
 
-    private final JButton confirm;
-    private final JButton undo;
-
     public GameView(GameModel model) {
         this.model = model;
-        this.confirm = new JButton("Confirm Move");
-        this.undo = new JButton("Undo Move");
+        this.confirmButton = new JButton("Confirm Move");
+        this.undoButton = new JButton("Undo Move");
         setLayout(new BorderLayout());
-        addGameState();
+        addStatePanel();
         addButtons();
         setPositions();
     }
 
-    private void addGameState() {
-        this.state = new JPanel(new GridBagLayout());
+    private void addStatePanel() {
+        this.statePanel = new JPanel(new GridBagLayout());
+        add(statePanel, BorderLayout.NORTH);
+
+        // label font
+        Font font = new Font("SansSerif", Font.PLAIN, 24);
+
+        // grid bag constraints for label organization
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0; // fixed column
         gbc.gridy = GridBagConstraints.RELATIVE; // stacks one after another
 
-        add(state, BorderLayout.NORTH);
+        // add turn label
+        this.turnLabel = new JLabel("Turn");
+        turnLabel.setFont(font);
+        statePanel.add(turnLabel, gbc);
 
-        Font font = new Font("SansSerif", Font.PLAIN, 24);
-        this.turn = new JLabel("Turn");
-        turn.setFont(font);
-        state.add(turn, gbc);
+        // add moved label
+        this.movedLabel = new JLabel("Moved");
+        movedLabel.setFont(font);
+        statePanel.add(movedLabel, gbc);
 
-        this.moved = new JLabel("Moved");
-        moved.setFont(font);
-        state.add(moved, gbc);
-
-        this.undosRemaining = new JLabel("Undos Remaining");
-        undosRemaining.setFont(font);
-        state.add(undosRemaining, gbc);
+        // add undos label
+        this.undosRemainingLabel = new JLabel("Undos Remaining");
+        undosRemainingLabel.setFont(font);
+        statePanel.add(undosRemainingLabel, gbc);
     }
 
     private void addButtons() {
         JPanel buttonPanel = new JPanel();
-        confirm.setPreferredSize(new Dimension(200, 50));
-        undo.setPreferredSize(new Dimension(200, 50));
-        buttonPanel.add(confirm);
-        buttonPanel.add(undo);
+        confirmButton.setPreferredSize(new Dimension(200, 50));
+        undoButton.setPreferredSize(new Dimension(200, 50));
+        buttonPanel.add(confirmButton);
+        buttonPanel.add(undoButton);
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
     public void addConfirmActionListener(ActionListener listener) {
-        confirm.addActionListener(listener);
+        confirmButton.addActionListener(listener);
     }
 
     public void addUndoActionListener(ActionListener listener) {
-        undo.addActionListener(listener);
+        undoButton.addActionListener(listener);
     }
 
     private void setPositions() {
@@ -83,34 +88,39 @@ public class GameView extends JPanel {
     }
 
     public void update() {
+        // get game state data
         GameModel.GameState gameState = model.getState();
         int turn = gameState.getTurn();
         int undosRemaining = gameState.getUndosRemaining();
+        boolean moved = gameState.isMoved();
+        GameModel.MOVE_TYPE moveType = gameState.getMoveType();
         char player = (char) ('A' + turn);
 
-        this.turn.setText("Player " + player + "'s turn");
-        this.undosRemaining.setText(undosRemaining + " undos remaining");
-        GameModel.MOVE_TYPE moveType = gameState.getMoveType();
+        // update labels
+        this.turnLabel.setText("Player " + player + "'s turn");
+        this.undosRemainingLabel.setText(undosRemaining + " undos remaining");
         switch (moveType) {
             case NEW_TURN:
-                this.moved.setText("Player " + player + " has not moved yet.");
+                this.movedLabel.setText("Player " + player + " has not moved yet.");
                 break;
             case FREE_TURN:
-                this.moved.setText("Player " + player + " has moved. Free turn!");
+                this.movedLabel.setText("Player " + player + " has moved. Free turn!");
                 break;
             case CAPTURE:
-                this.moved.setText("Player " + player + " has moved. Capture!");
+                this.movedLabel.setText("Player " + player + " has moved. Capture!");
                 break;
             case NORMAL:
-                this.moved.setText("Player " + player + " has moved.");
+                this.movedLabel.setText("Player " + player + " has moved.");
                 break;
             case UNDO:
-                this.moved.setText("Last move undone. Player " + player + " has not moved yet.");
+                this.movedLabel.setText("Last move undone. Player " + player + " has not moved yet.");
                 break;
         }
-        boolean moved = gameState.isMoved();
-        confirm.setEnabled(moved);
-        undo.setEnabled(moved && gameState.getUndosRemaining() > 0);
+
+        // update buttons
+        confirmButton.setEnabled(moved);
+        undoButton.setEnabled(moved && gameState.getUndosRemaining() > 0);
+
         repaint();
     }
 
@@ -123,20 +133,22 @@ public class GameView extends JPanel {
     }
 
     public void draw(Graphics2D g2) {
-        // could be part of a strategy pattern
+        // board font and thickness
         g2.setFont(new Font("SansSerif", Font.BOLD, 24));
         g2.setStroke(new BasicStroke(2));
 
         RoundRectangle2D board = new RoundRectangle2D.Double(getX() + xOffset, getY() + yOffset, 1250, 550, 150, 150);
 
-        // color
+        // board color setup
         Color temp = g2.getColor();
         g2.setColor(Color.decode("#a06545"));
         g2.fill(board);
         g2.setColor(temp);
 
+        // draw board
         g2.draw(board);
 
+        // draw containers (pits and mancalas)
         StoneContainer[][] containers = model.getContainers();
         for (int row = 0; row < containers.length; row++) {
             for (int col = 0; col < containers[row].length; col++) {

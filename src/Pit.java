@@ -3,9 +3,10 @@ import java.awt.geom.Ellipse2D;
 
 public class Pit extends StoneContainer {
     final double ICON_SIZE = 100;
-//    PitStrategy strategy;
+    //PitStrategy strategy;
     private int row;
     private int col;
+
     /**
      * Default constructor of a pit.
      */
@@ -43,7 +44,7 @@ public class Pit extends StoneContainer {
         return ret;
     }
     public void draw(Graphics2D g2) {
-//        strategy.draw();
+        //strategy.draw();
         Ellipse2D pit = new Ellipse2D.Double(getX(), getY(), ICON_SIZE, ICON_SIZE);
 
         // pit color setup
@@ -52,9 +53,10 @@ public class Pit extends StoneContainer {
         g2.fill(pit);
         g2.setColor(temp);
 
+        // draw pit
         g2.draw(pit);
 
-        // pit label
+        // draw pit label
         char letter = (char) ('A' + row);
         String name = "";
         name += letter;
