@@ -107,7 +107,11 @@ public class GameView extends JPanel {
                 this.movedLabel.setText("Player " + player + " has moved. Free turn!");
                 break;
             case CAPTURE:
-                this.movedLabel.setText("Player " + player + " has moved. Capture!");
+                char letter = (char) ('A' + (gameState.getTurn() + 1) % 2);
+                String capturedPitName = "";
+                capturedPitName += letter;
+                capturedPitName += model.getNumPits() - gameState.getEndCol();
+                this.movedLabel.setText("Player " + player + " has moved. Captured " + capturedPitName + "!");
                 break;
             case NORMAL:
                 this.movedLabel.setText("Player " + player + " has moved.");

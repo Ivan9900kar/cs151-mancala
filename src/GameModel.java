@@ -48,9 +48,11 @@ public class GameModel {
         public boolean isMoved() {
             return this.moved;
         }
-
         public MOVE_TYPE getMoveType() {
             return this.moveType;
+        }
+        public int getEndCol() {
+            return this.endCol;
         }
     }
     /**
@@ -156,13 +158,13 @@ public class GameModel {
      * @param col the index of the pit chosen by the player to be the source of the move
      */
     public void move(int row, int col) {
-        // if clicking the opponent's Pit, exit
+        // if clicking opponent's containers, exit
         if (row != state.turn) return;
 
         // if already moved, exit
         if (state.moved) return;
 
-        // check validity of move (if it is pit, and is there a stone to take)
+        // check validity of move (if it is pit and not mancala, and is there a stone to take)
         int numStones = 0;
         if (containers[row][col] instanceof Pit p) {
             numStones = p.takeStones();
