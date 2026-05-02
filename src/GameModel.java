@@ -10,6 +10,9 @@ public class GameModel {
     private ArrayList<GameView> views; // arraylist to hold views to update (listeners)
     private GameView currentView;
     private GameState state; // inner class object for additional data
+    public enum MOVE_TYPE {
+        NEW_TURN,NORMAL, FREE_TURN, CAPTURE, UNDO, 
+    }
 
     /**
      * GameState is an inner class that holds additional data for tracking and preserving the state of the game, apart from the board itself.
@@ -22,6 +25,7 @@ public class GameModel {
         private int specialSteal; //how stones did the respective player's mancala have before the turn
         private int undosRemaining; // how many undos the current player has remaining
         private boolean moved; // whether the player has already moved in their turn
+        private MOVE_TYPE moveType; // what type of move the player has made (for tracking free turns, captures, invalid moves, and undos)
         /**
          * GameState class default constructor
          */
@@ -33,6 +37,7 @@ public class GameModel {
             this.specialSteal = 0;
             this.undosRemaining = 3;
             this.moved = false;
+            this.moveType = MOVE_TYPE.NEW_TURN;
         }
         public int getTurn() {
             return this.turn;
@@ -42,6 +47,10 @@ public class GameModel {
         }
         public boolean isMoved() {
             return this.moved;
+        }
+
+        public MOVE_TYPE getMoveType() {
+            return this.moveType;
         }
     }
     /**
@@ -147,21 +156,24 @@ public class GameModel {
      * @param col the index of the pit chosen by the player to be the source of the move
      */
     public void move(int row, int col) {
-        // if clicking the opponent's Pit, disallow and return (do nothing)
+        // if clicking the opponent's Pit, exit
         if (row != state.turn) return;
-        // if already moved, return
+
+        // if already moved, exit
         if (state.moved) return;
 
-        // check validity of move (is there a stone to take)
+        // check validity of move (if it is pit, and is there a stone to take)
         int numStones = 0;
-
         if (containers[row][col] instanceof Pit p) {
             numStones = p.takeStones();
-            state.startCol = col;
-            state.numStones = numStones;
         }
-        // if the number of stones in pit was 0, return
+        // if the number of stones in pit was 0, or if selected container was a mancala, exit
         if (numStones == 0) return;
+
+        // save initial state of move for undoing
+        state.startCol = col;
+        state.numStones = numStones;
+
         // move the stones
         while (numStones > 0) {
             // traversal of the board counterclockwise, looping through the matrix
@@ -175,24 +187,30 @@ public class GameModel {
             }
         }
 
+        // update game state to reflect move
+        state.moveType = MOVE_TYPE.NORMAL;
+        state.moved = true;
         state.endCol = col;
 
         // special case where last stone is placed in empty pit on current player's side
-        if (row == state.turn && col != containers[row].length - 1) {
-            StoneContainer s = containers[row][col];
-            if (s.getStones() == 1 && s instanceof Pit p) {
-                Mancala m = (Mancala) containers[row][containers[row].length - 1];
+        if (row == state.turn && containers[row][col] instanceof Pit p && p.getStones() == 1) {
+            state.moveType = GameModel.MOVE_TYPE.CAPTURE;
 
-                // take from current player's side and add to their mancala
-                m.addStones(p.takeStones());
+            Mancala m = (Mancala) containers[row][containers[row].length - 1];
+
+            // take from current player's side and add to their mancala
+            m.addStones(p.takeStones());
 
                 // take from opponent's side and add to current player's mancala
                 int oppCol = numPits - 1 - col;
                 state.specialSteal = ((Pit) containers[(row + 1) % NUM_PLAYERS][oppCol]).takeStones();
                 m.addStones(state.specialSteal);
-            }
         }
-        state.moved = true;
+
+        // special case where last stone is placed in current player's mancala
+        if (col == containers[state.turn].length - 1) {
+            state.moveType = MOVE_TYPE.FREE_TURN;
+        }
 
         updateView();
     }
@@ -200,15 +218,17 @@ public class GameModel {
      * Confirms the move of the current player, ends turn and starts turn of next player
      */
     public void confirm() {
-        // if player hasn't moved yet, return
+        // if player hasn't moved yet, exit
         if (!state.moved) return;
-        //reset move status
-        state.moved = false;
 
-        // turn over to next player if not gaining another turn
+        // reset move state
+        state.moved = false;
+        state.moveType = MOVE_TYPE.NEW_TURN;
+        state.undosRemaining = 3;
+
+        // turn over to next player if not using free turn
         if (state.endCol != containers[state.turn].length - 1) {
             state.turn = (state.turn + 1) % NUM_PLAYERS;
-            state.undosRemaining = 3;
         }
 
         updateView();
@@ -217,7 +237,7 @@ public class GameModel {
      * Undos the move done by the current player, setting the board back to how it was before the move.
      */
     public void undo() {
-        // if player hasn't moved or instead used up all of their undos, return
+        // if player hasn't moved or instead used up all of their undos, exit
         if (!state.moved || state.undosRemaining < 1) return;
 
         int row = state.turn;
@@ -252,6 +272,7 @@ public class GameModel {
         }
 
         state.moved = false;
+        state.moveType = MOVE_TYPE.UNDO;
         state.undosRemaining--;
 
         updateView();

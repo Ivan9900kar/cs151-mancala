@@ -8,9 +8,9 @@ import java.awt.geom.RoundRectangle2D;
 public class GameView extends JPanel {
     private GameModel model;
     private JPanel state;
-    private JTextField moved;
-    private JTextField turn;
-    private JTextField undosRemaining;
+    private JLabel moved;
+    private JLabel turn;
+    private JLabel undosRemaining;
     private final double xOffset = 100;
     private final double yOffset = 100;
     public GameView(GameModel model) {
@@ -33,25 +33,25 @@ public class GameView extends JPanel {
         }
     }
     private void gameState() {
-        this.state = new JPanel();
+        this.state = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0; // fixed column
+        gbc.gridy = GridBagConstraints.RELATIVE; // stacks one after another
+
         add(state, BorderLayout.NORTH);
 
         Font font = new Font("SansSerif", Font.PLAIN, 24);
-
-        this.moved = new JTextField("Moved");
-        moved.setFont(font);
-        moved.setEditable(false);
-        state.add(moved);
-
-        this.turn = new JTextField("Turn");
+        this.turn = new JLabel("Turn");
         turn.setFont(font);
-        turn.setEditable(false);
-        state.add(turn);
+        state.add(turn, gbc);
 
-        this.undosRemaining = new JTextField("Undos Remaining");
+        this.moved = new JLabel("Moved");
+        moved.setFont(font);
+        state.add(moved, gbc);
+
+        this.undosRemaining = new JLabel("Undos Remaining");
         undosRemaining.setFont(font);
-        undosRemaining.setEditable(false);
-        state.add(undosRemaining);
+        state.add(undosRemaining, gbc);
     }
     private void setPositions() {
         StoneContainer[][] containers = model.getContainers();
@@ -74,13 +74,29 @@ public class GameView extends JPanel {
         GameModel.GameState gameState = model.getState();
         int turn = gameState.getTurn();
         int undosRemaining = gameState.getUndosRemaining();
-        boolean moved = gameState.isMoved();
-
+        //boolean moved = gameState.isMoved();
         char player = (char) ('A' + turn);
+
         this.turn.setText("Player " + player + "'s turn");
         this.undosRemaining.setText(undosRemaining + " undos remaining");
-        if (moved) this.moved.setText("Player " + player + " has moved");
-        else this.moved.setText("Player " + player + " has not moved yet");
+        GameModel.MOVE_TYPE moveType = gameState.getMoveType();
+        switch (moveType) {
+            case NEW_TURN:
+                this.moved.setText("Player " + player + " has not moved yet.");
+                break;
+            case FREE_TURN:
+                this.moved.setText("Player " + player + " has moved. Free turn!");
+                break;
+            case CAPTURE:
+                this.moved.setText("Player " + player + " has moved. Capture!");
+                break;
+            case NORMAL:
+                this.moved.setText("Player " + player + " has moved.");
+                break;
+            case UNDO:
+                this.moved.setText("Last move undone. Player " + player + " has not moved yet.");
+                break;
+        }
 
         repaint();
     }
