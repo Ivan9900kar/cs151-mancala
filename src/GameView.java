@@ -11,8 +11,8 @@ public class GameView extends JPanel {
     private JLabel undosRemainingLabel;
     private final JButton confirmButton;
     private final JButton undoButton;
-    private final double xOffset = 100;
-    private final double yOffset = 100;
+    private final double xOffset = 120;
+    private final double yOffset = 120;
 
     public GameView(GameModel model) {
         this.model = model;
