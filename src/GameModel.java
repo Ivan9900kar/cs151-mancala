@@ -221,6 +221,9 @@ public class GameModel {
      * Confirms the move of the current player, ends turn and starts turn of next player
      */
     public void confirm() {
+        // UNCOMMENT FOR TESTING AND DELETE LATER
+        //currentView.endMenu(0, 0);
+        
         // if player hasn't moved yet, exit
         if (!state.moved) return;
 
@@ -302,14 +305,6 @@ public class GameModel {
                 sum[i] += containers[i][j].getStones();
             }
         }
-        int current = 0;
-        int currentRow = 0;
-        for (int i = 0; i < NUM_PLAYERS; i++) {
-            current = Math.max(current, sum[i]);
-            if (current == sum[i]) {
-                currentRow = i; 
-            }
-        }
-        //endMenu();
+        currentView.endMenu(sum[0], sum[1]);
     }
 }

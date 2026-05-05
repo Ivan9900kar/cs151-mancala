@@ -107,16 +107,31 @@ public class GameView extends JPanel {
     /**
      * 
      */
-    public int stonesMenu() {
+    public int startMenu() {
         String[] options = {"3", "4"};
-        int choice = JOptionPane.showOptionDialog(this, "Set the number of stones per pit to start with:", "Starting Number of Stones", JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        int choice = JOptionPane.showOptionDialog(this, "Set the number of stones per pit to start with:", "Starting Number of Stones", JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
         return choice + 3;
     }
     /**
      * 
      */
-    public void endMenu() {
+    public void endMenu(int playerAScore, int playerBScore) {
+        String message;
+        if (playerAScore == playerBScore) {
+            message = "Game tie!";
+        } else {
+            char winner = (playerAScore > playerBScore) ? 'A' : 'B';
+            message = "Player " + winner + " wins!";
+        }
 
+        String[] options = {"Restart", "Exit"};
+        int choice = JOptionPane.showOptionDialog(this, message + "\nPlayer A Score: " + playerAScore + "\nPlayer B Score: " + playerBScore + "\nWould you like to restart game or exit?", "Game End", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+        if (choice == 0) { 
+            // WRITE RESTART
+            
+        } else {
+            System.exit(0);
+        }
     }
     /**
      * 

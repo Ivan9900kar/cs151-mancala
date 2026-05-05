@@ -14,7 +14,7 @@ public class MancalaTest {
         GameView view = model.getCurrentView();
         frame.add(view, BorderLayout.CENTER);
 
-        int numStones = view.stonesMenu();
+        int numStones = view.startMenu();
         model.setStartingStones(numStones);
 
         new GameController(model, view);
