@@ -7,12 +7,15 @@ public class MancalaTest {
     }
     public static void play() {
         GameModel model = new GameModel(6);
-        model.setStartingStones(4);
+
         JFrame frame = new JFrame();
         frame.setSize(1500, 800);
 
         GameView view = model.getCurrentView();
         frame.add(view, BorderLayout.CENTER);
+
+        int numStones = view.stonesMenu();
+        model.setStartingStones(numStones);
 
         new GameController(model, view);
 

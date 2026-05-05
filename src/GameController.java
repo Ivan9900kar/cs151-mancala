@@ -3,16 +3,13 @@ import java.awt.event.MouseEvent;
 
 public class GameController {
     private final GameModel model;
-    //private final GameView view;
 
     public GameController(GameModel model, GameView view) {
         this.model = model;
-        //this.view = view;
         view.addConfirmActionListener(e -> model.confirm());
         view.addUndoActionListener(e -> model.undo());
         view.addMouseListener(new MyMouseListener());
         view.update();
-
     }
 
     private class MyMouseListener extends MouseAdapter {

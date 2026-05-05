@@ -3,6 +3,9 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 
+/**
+ * 
+ */
 public class GameView extends JPanel {
     private GameModel model;
     private JPanel statePanel;
@@ -13,7 +16,10 @@ public class GameView extends JPanel {
     private final JButton undoButton;
     private final double xOffset = 120;
     private final double yOffset = 120;
-
+    /**
+     * 
+     * @param model
+     */
     public GameView(GameModel model) {
         this.model = model;
         this.confirmButton = new JButton("Confirm Move");
@@ -23,7 +29,9 @@ public class GameView extends JPanel {
         addButtons();
         setPositions();
     }
-
+    /**
+     * 
+     */
     private void addStatePanel() {
         this.statePanel = new JPanel(new GridBagLayout());
         add(statePanel, BorderLayout.NORTH);
@@ -51,7 +59,9 @@ public class GameView extends JPanel {
         undosRemainingLabel.setFont(font);
         statePanel.add(undosRemainingLabel, gbc);
     }
-
+    /**
+     * 
+     */
     private void addButtons() {
         JPanel buttonPanel = new JPanel();
         confirmButton.setPreferredSize(new Dimension(200, 50));
@@ -60,15 +70,23 @@ public class GameView extends JPanel {
         buttonPanel.add(undoButton);
         add(buttonPanel, BorderLayout.SOUTH);
     }
-
+    /**
+     * 
+     * @param listener
+     */
     public void addConfirmActionListener(ActionListener listener) {
         confirmButton.addActionListener(listener);
     }
-
+    /**
+     * 
+     * @param listener
+     */
     public void addUndoActionListener(ActionListener listener) {
         undoButton.addActionListener(listener);
     }
-
+    /**
+     * 
+     */
     private void setPositions() {
         StoneContainer[][] containers = model.getContainers();
         for (int row = 0; row < containers.length; row++) {
@@ -86,7 +104,23 @@ public class GameView extends JPanel {
             }
         }
     }
+    /**
+     * 
+     */
+    public int stonesMenu() {
+        String[] options = {"3", "4"};
+        int choice = JOptionPane.showOptionDialog(this, "Set the number of stones per pit to start with:", "Starting Number of Stones", JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        return choice + 3;
+    }
+    /**
+     * 
+     */
+    public void endMenu() {
 
+    }
+    /**
+     * 
+     */
     public void update() {
         // get game state data
         GameModel.GameState gameState = model.getState();
@@ -135,7 +169,7 @@ public class GameView extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         draw(g2);
     }
-
+    
     public void draw(Graphics2D g2) {
         // board font and thickness
         g2.setFont(new Font("SansSerif", Font.BOLD, 24));
@@ -161,5 +195,4 @@ public class GameView extends JPanel {
             }
         }
     }
-
 }
