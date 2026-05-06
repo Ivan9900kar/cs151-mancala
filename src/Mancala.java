@@ -1,11 +1,7 @@
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 
 public class Mancala extends StoneContainer {
-    final double ICON_WIDTH = 100;
-    final double ICON_HEIGHT = 450;
-    final double ICON_SEMI = 100;
-    
+    BoardStyle strategy;
     private int row; 
 
     public Mancala() {
@@ -18,22 +14,12 @@ public class Mancala extends StoneContainer {
     public void setRow(int row) { 
         this.row = row;
     }
+    public void setStrategy(BoardStyle strategy) {
+        this.strategy = strategy;
+    }
     public void draw(Graphics2D g2) {
-        RoundRectangle2D mancala = new RoundRectangle2D.Double(getX(), getY(), ICON_WIDTH, ICON_HEIGHT, ICON_SEMI, ICON_SEMI);
-
-        // mancala color setup
-        Color temp = g2.getColor();
-        g2.setColor(Color.decode("#dcbc97"));
-        g2.fill(mancala);
-        g2.setColor(temp);
-
-        // draw mancala
-        g2.draw(mancala);
-        
-        // draw mancala label
-        char letter = (char) ('A' + row);
-        String label = "Mancala " + letter;
-        g2.drawString(label, (int)(getX() - 18), (int)(getY() - 10));
+        // draw mancala using strategy pattern
+        strategy.drawMancala(g2, getX(), getY(), row);
 
         // draw number of stones in mancala
         super.draw(g2);

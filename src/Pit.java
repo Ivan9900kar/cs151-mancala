@@ -1,9 +1,7 @@
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 
 public class Pit extends StoneContainer {
-    final double ICON_SIZE = 100;
-    //PitStrategy strategy;
+    BoardStyle strategy;
     private int row;
     private int col;
 
@@ -34,6 +32,9 @@ public class Pit extends StoneContainer {
     public void setCol(int col) {
         this.col = col;
     }
+        public void setStrategy(BoardStyle strategy) {
+        this.strategy = strategy;
+    }
     /**
      * Takes all of the stones out of the pit and returns the taken amount.
      * @return the number of stones that were inside of the pit
@@ -44,24 +45,8 @@ public class Pit extends StoneContainer {
         return ret;
     }
     public void draw(Graphics2D g2) {
-        //strategy.draw();
-        Ellipse2D pit = new Ellipse2D.Double(getX(), getY(), ICON_SIZE, ICON_SIZE);
-
-        // pit color setup
-        Color temp = g2.getColor();
-        g2.setColor(Color.decode("#dcbc97"));
-        g2.fill(pit);
-        g2.setColor(temp);
-
-        // draw pit
-        g2.draw(pit);
-
-        // draw pit label
-        char letter = (char) ('A' + row);
-        String name = "";
-        name += letter;
-        name += col + 1;
-        g2.drawString(name, (int) getX() + 33, (int) getY() - 5);
+        strategy.drawPit(g2, getX(), getY(), row, col);
+        
 
         // draw number of stones in pit
         super.draw(g2);

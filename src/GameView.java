@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.geom.RoundRectangle2D;
 
 /**
  * 
@@ -16,6 +15,7 @@ public class GameView extends JPanel {
     private final JButton undoButton;
     private final double xOffset = 120;
     private final double yOffset = 120;
+    BoardStyle strategy;
     /**
      * 
      * @param model
@@ -107,9 +107,25 @@ public class GameView extends JPanel {
     /**
      * 
      */
-    public int startMenu() {
+    public void styleMenu() {
+        String[] options = {"Style 1", "Style 2"};
+        int choice = JOptionPane.showOptionDialog(this, "Select which style of board to use:", "Board Style Selection", JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+        switch (choice) {
+            case 0:
+                strategy = new Style1();
+                break;
+            case 1:
+                strategy = new Style2();
+                break;
+        }
+        model.setStrategy(strategy);
+    }
+    /**
+     * 
+     */
+    public int stonesMenu() {
         String[] options = {"3", "4"};
-        int choice = JOptionPane.showOptionDialog(this, "Set the number of stones per pit to start with:", "Starting Number of Stones", JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+        int choice = JOptionPane.showOptionDialog(this, "Set the number of stones per pit to start with:", "Game Initialization", JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
         return choice + 3;
     }
     /**
@@ -186,22 +202,10 @@ public class GameView extends JPanel {
     }
     
     public void draw(Graphics2D g2) {
-        // board font and thickness
-        g2.setFont(new Font("SansSerif", Font.BOLD, 24));
-        g2.setStroke(new BasicStroke(2));
+        // draw board using strategy
+        strategy.drawBoard(g2, getX() + xOffset, getY() + yOffset);
 
-        RoundRectangle2D board = new RoundRectangle2D.Double(getX() + xOffset, getY() + yOffset, 1250, 550, 150, 150);
-
-        // board color setup
-        Color temp = g2.getColor();
-        g2.setColor(Color.decode("#a06545"));
-        g2.fill(board);
-        g2.setColor(temp);
-
-        // draw board
-        g2.draw(board);
-
-        // draw containers (pits and mancalas)
+        // draw containers (pits and mancalas) (call strategy from their own draw method)
         StoneContainer[][] containers = model.getContainers();
         for (int row = 0; row < containers.length; row++) {
             for (int col = 0; col < containers[row].length; col++) {

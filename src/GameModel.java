@@ -307,4 +307,19 @@ public class GameModel {
         }
         currentView.endMenu(sum[0], sum[1]);
     }
+    /**
+     * 
+     * @param strategy
+     */
+    public void setStrategy(BoardStyle strategy) {
+        for (StoneContainer[] row : containers) {
+            for (StoneContainer container : row) {
+                if (container instanceof Pit p) {
+                    p.setStrategy(strategy);
+                } else if (container instanceof Mancala m) {
+                    m.setStrategy(strategy);
+                }
+            }
+        }
+    }
 }

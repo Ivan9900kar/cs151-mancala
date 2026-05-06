@@ -6,6 +6,7 @@ public class MancalaTest {
         play();
     }
     public static void play() {
+        
         GameModel model = new GameModel(6);
 
         JFrame frame = new JFrame();
@@ -14,7 +15,9 @@ public class MancalaTest {
         GameView view = model.getCurrentView();
         frame.add(view, BorderLayout.CENTER);
 
-        int numStones = view.startMenu();
+        view.styleMenu();
+
+        int numStones = view.stonesMenu();
         model.setStartingStones(numStones);
 
         new GameController(model, view);
