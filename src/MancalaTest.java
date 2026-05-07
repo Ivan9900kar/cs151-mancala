@@ -1,5 +1,6 @@
 /**
  * Title: CS 151 Mancala Project
+ * GROUP 7
  * Authors: Anthony Ryabov, Darren Vu, Isaiah Mak
  */
 
@@ -22,7 +23,7 @@ public class MancalaTest {
         GameModel model = new GameModel(6);
 
         // game window
-        JFrame frame = new JFrame();
+        JFrame frame = new JFrame("Mancala Game (CS 151 - Group 7)");
         frame.setSize(1500, 800);
 
         // view

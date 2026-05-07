@@ -10,7 +10,7 @@ Isaiah Mak
 ```bash
 javac -d out src/*.java && java -cp out MancalaTest
 ```
-or:  
+or, if source files are in project root:  
 ```bash
 javac -d out *.java && java -cp out MancalaTest
 ```
