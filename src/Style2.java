@@ -28,7 +28,14 @@ public class Style2 implements BoardStyle {
         g2.drawString(name, (int) x + 33, (int) y - 5);
 
     }
-    // draws the mancala with a random color and label
+    /**
+     * Draws a mancala with a random color and label.
+     *
+     * @param g2 the graphics context used for drawing
+     * @param x the x-coordinate of the mancala
+     * @param y the y-coordinate of the mancala
+     * @param row the row index used to generate the mancala label
+     */
     public void drawMancala(Graphics2D g2, double x, double y, int row) {
         Rectangle2D mancala = new Rectangle2D.Double(x, y, ICON_WIDTH, ICON_HEIGHT);
 
@@ -44,7 +51,13 @@ public class Style2 implements BoardStyle {
         g2.drawString(label, (int) (x - 18), (int) (y - 10));
 
     }
-    // draws the board with a random color
+    /**
+     * Draws the board with a random color.
+     *
+     * @param g2 the graphics context used for drawing
+     * @param x the x-coordinate of the board
+     * @param y the y-coordinate of the board
+     */
     public void drawBoard(Graphics2D g2, double x, double y) {
         // board font and thickness
         g2.setFont(new Font("SansSerif", Font.BOLD, 24));
@@ -59,7 +72,12 @@ public class Style2 implements BoardStyle {
         g2.draw(board);
 
     }
-    // Draws stones in each container
+    /**
+     * Draws stones in the given container based on its type and stone count.
+     *
+     * @param g2 the graphics context used for drawing
+     * @param container the container whose stones are drawn
+     */
     public void drawStone(Graphics2D g2, StoneContainer container) {
         int numStones = container.getStones();
         double x = container.getX();
@@ -67,7 +85,14 @@ public class Style2 implements BoardStyle {
         if (container instanceof Pit) drawStonesPit(g2, numStones, x, y);
         if (container instanceof Mancala) drawStonesMancala(g2, numStones, x, y);
     }
-     //Draws and adjust stones in a pit using preset layouts and coordinates fill in with color 
+    /**
+     * Draws stones in a pit using different layouts based on the stone count.
+     *
+    * @param g2 the graphics context used for drawing
+    * @param numStones the number of stones to draw
+    * @param x the x-coordinate of the pit
+    * @param y the y-coordinate of the pit
+     */
     public void drawStonesPit(Graphics2D g2, int numStones, double x, double y) {
         if (numStones == 0) return;
         switch (numStones) {
@@ -186,7 +211,14 @@ public class Style2 implements BoardStyle {
                 break;
         }
     }
-    // Draws stones and color stacked vertically in a mancala
+        /**
+         * Draws stones in a mancala as a vertical stack.
+         *
+         * @param g2 the graphics context used for drawing
+         * @param numStones the number of stones to draw
+         * @param x the x-coordinate of the mancala
+         * @param y the y-coordinate of the mancala
+         */
     public void drawStonesMancala(Graphics2D g2, int numStones, double x, double y) {
         Rectangle2D.Double stone;
         double width = (ICON_HEIGHT - 50) / numStones;

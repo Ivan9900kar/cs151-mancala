@@ -12,6 +12,15 @@ public class Style1 implements BoardStyle {
     final double ICON_HEIGHT = 450;
     final double ICON_SEMI = 100;
 
+    /**
+     * Draws a pit with a label.
+     *
+     * @param g2 the graphics context used for drawing
+     * @param x the x-coordinate of the pit
+     * @param y the y-coordinate of the pit
+     * @param row the row index used for labeling
+     * @param col the column index used for labeling
+     */
     public void drawPit(Graphics2D g2, double x, double y, int row, int col) {
         Ellipse2D pit = new Ellipse2D.Double(x, y, ICON_SIZE, ICON_SIZE);
 
@@ -31,6 +40,14 @@ public class Style1 implements BoardStyle {
         g2.drawString(name, (int) x + 33, (int) y - 5);
 
     }
+    /**
+     * Draws a mancala with a random color and label.
+     *
+     * @param g2 the graphics context used for drawing
+     * @param x the x-coordinate of the mancala
+     * @param y the y-coordinate of the mancala
+     * @param row the row index used to generate the mancala label
+     */
     public void drawMancala(Graphics2D g2, double x, double y, int row) {
         RoundRectangle2D mancala = new RoundRectangle2D.Double(x, y, ICON_WIDTH, ICON_HEIGHT, ICON_SEMI, ICON_SEMI);
 
@@ -48,6 +65,13 @@ public class Style1 implements BoardStyle {
         g2.drawString(label, (int) (x - 18), (int) (y - 10));
 
     }
+    /**
+     * Draws the board with a random color.
+     *
+     * @param g2 the graphics context used for drawing
+     * @param x the x-coordinate of the board
+     * @param y the y-coordinate of the board
+     */
     public void drawBoard(Graphics2D g2, double x, double y) {
         // board font and thickness
         g2.setFont(new Font("SansSerif", Font.BOLD, 24));
@@ -64,7 +88,12 @@ public class Style1 implements BoardStyle {
         g2.draw(board);
 
     }
-    // draws the stones in the pits and mancalas based on number of stones in the container
+    /**
+     * Draws stones in the given container based on its type and stone count.
+     *
+     * @param g2 the graphics context used for drawing
+     * @param container the container whose stones are drawn
+     */
     public void drawStone(Graphics2D g2, StoneContainer container) {
         int numStones = container.getStones();
         double x = container.getX();
@@ -72,7 +101,14 @@ public class Style1 implements BoardStyle {
         if (container instanceof Pit) drawStonesPit(g2, numStones, x, y);
         if (container instanceof Mancala) drawStonesMancala(g2, numStones, x, y);
     }
-    //Draws and adjust stones in a pit using preset layouts and coordinates fill in with color 
+      /**
+     * Draws stones in a pit using different layouts based on the stone count.
+     *
+    * @param g2 the graphics context used for drawing
+    * @param numStones the number of stones to draw
+    * @param x the x-coordinate of the pit
+    * @param y the y-coordinate of the pit
+     */
     public void drawStonesPit(Graphics2D g2, int numStones, double x, double y) {
         if (numStones == 0) return;
         switch (numStones) {
@@ -191,7 +227,14 @@ public class Style1 implements BoardStyle {
                 break;
         }
     }
-    // colors and draws the stones in mancala  
+    /**
+     * Draws stones in a mancala as a vertical stack.
+     *
+     * @param g2 the graphics context used for drawing
+     * @param numStones the number of stones to draw
+     * @param x the x-coordinate of the mancala
+     * @param y the y-coordinate of the mancala
+     */
     public void drawStonesMancala(Graphics2D g2, int numStones, double x, double y) {
         Ellipse2D.Double stone;
         double width = (ICON_HEIGHT - 50) / numStones;
