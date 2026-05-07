@@ -10,3 +10,7 @@ Isaiah Mak
 ```bash
 javac -d out src/*.java && java -cp out MancalaTest
 ```
+or:  
+```bash
+javac -d out *.java && java -cp out MancalaTest
+```
