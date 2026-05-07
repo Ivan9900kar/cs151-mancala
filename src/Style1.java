@@ -64,6 +64,7 @@ public class Style1 implements BoardStyle {
         g2.draw(board);
 
     }
+    // draws the stones in the pits and mancalas based on number of stones in the container
     public void drawStone(Graphics2D g2, StoneContainer container) {
         int numStones = container.getStones();
         double x = container.getX();
@@ -71,6 +72,7 @@ public class Style1 implements BoardStyle {
         if (container instanceof Pit) drawStonesPit(g2, numStones, x, y);
         if (container instanceof Mancala) drawStonesMancala(g2, numStones, x, y);
     }
+    //Draws and adjust stones in a pit using preset layouts and coordinates fill in with color 
     public void drawStonesPit(Graphics2D g2, int numStones, double x, double y) {
         if (numStones == 0) return;
         switch (numStones) {
@@ -189,6 +191,7 @@ public class Style1 implements BoardStyle {
                 break;
         }
     }
+    // colors and draws the stones in mancala  
     public void drawStonesMancala(Graphics2D g2, int numStones, double x, double y) {
         Ellipse2D.Double stone;
         double width = (ICON_HEIGHT - 50) / numStones;
