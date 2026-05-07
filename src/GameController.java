@@ -1,3 +1,8 @@
+/**
+ * Title: CS 151 Mancala Project
+ * Authors: Anthony Ryabov, Darren Vu, Isaiah Mak
+ */
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 

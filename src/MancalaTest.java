@@ -1,6 +1,14 @@
+/**
+ * Title: CS 151 Mancala Project
+ * Authors: Anthony Ryabov, Darren Vu, Isaiah Mak
+ */
+
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Main class to run the Mancala game. Contains the main method and a play method to set up the game.
+ */
 public class MancalaTest {
     public static void main(String[] args) {
         play();
@@ -31,7 +39,7 @@ public class MancalaTest {
         // controller
         new GameController(model, view);
 
-        // finish frame setup
+        // finish game window setup
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);

@@ -1,3 +1,8 @@
+/**
+ * Title: CS 151 Mancala Project
+ * Authors: Anthony Ryabov, Darren Vu, Isaiah Mak
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
