@@ -16,10 +16,9 @@ public class Style1 implements BoardStyle {
         Ellipse2D pit = new Ellipse2D.Double(x, y, ICON_SIZE, ICON_SIZE);
 
         // pit color setup
-        Color temp = g2.getColor();
         g2.setColor(Color.decode("#dcbc97"));
         g2.fill(pit);
-        g2.setColor(temp);
+        g2.setColor(Color.BLACK);
 
         // draw pit
         g2.draw(pit);
@@ -36,10 +35,9 @@ public class Style1 implements BoardStyle {
         RoundRectangle2D mancala = new RoundRectangle2D.Double(x, y, ICON_WIDTH, ICON_HEIGHT, ICON_SEMI, ICON_SEMI);
 
         // mancala color setup
-        Color temp = g2.getColor();
         g2.setColor(Color.decode("#dcbc97"));
         g2.fill(mancala);
-        g2.setColor(temp);
+        g2.setColor(Color.BLACK);
 
         // draw mancala
         g2.draw(mancala);
@@ -58,10 +56,9 @@ public class Style1 implements BoardStyle {
         RoundRectangle2D board = new RoundRectangle2D.Double(x, y, 1250, 550, 150, 150);
 
         // board color setup
-        Color temp = g2.getColor();
         g2.setColor(Color.decode("#a06545"));
         g2.fill(board);
-        g2.setColor(temp);
+        g2.setColor(Color.BLACK);
 
         // draw board
         g2.draw(board);

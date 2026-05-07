@@ -11,8 +11,11 @@ public class RandomColorFactory {
      */
     public static void drawGray(Graphics2D g2, Shape shape) {
         g2.setColor(Color.GRAY);
+        g2.setStroke(new BasicStroke(1));
         g2.fill(shape);
         g2.setColor(Color.BLACK);
+        g2.draw(shape);
+        g2.setStroke(new BasicStroke(2));
     }
 
     /**
@@ -29,7 +32,7 @@ public class RandomColorFactory {
 
     /**
      * Random RGB value ranging from 100 to 249
-     * @return
+     * @return 
      */
     public static int randomRGB() {
         return (int) (Math.random() * 150) + 100;
