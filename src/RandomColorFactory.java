@@ -18,7 +18,7 @@ public class RandomColorFactory {
     /**
      * Draws the shape filled with a random color and black border
      * @param g2
-     * @param shape
+     * @param shape Shape to be drawn
      */
     public static void drawRandomColor(Graphics2D g2, Shape shape) {
          g2.setColor(new Color(randomRGB(), randomRGB(), randomRGB()));

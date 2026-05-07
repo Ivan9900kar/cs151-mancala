@@ -12,7 +12,7 @@ public class Mancala extends StoneContainer {
      * Mancala default constructor.
      */
     public Mancala() {
-        super();
+        this(0);
     }
 
     /**
@@ -21,6 +21,7 @@ public class Mancala extends StoneContainer {
      */
     public Mancala(int stones) {
         super(stones);
+        this.row = -1;
     }
 
     /**

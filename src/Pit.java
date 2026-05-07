@@ -13,7 +13,7 @@ public class Pit extends StoneContainer {
      * Default constructor of a pit.
      */
     public Pit() {
-        super();
+        this(0);
     }
 
     /**
