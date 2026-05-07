@@ -17,9 +17,10 @@ public class GameView extends JPanel {
     private final double xOffset = 120;
     private final double yOffset = 120;
     BoardStyle strategy;
+
     /**
-     * 
-     * @param model
+     * Constructor for GameView, initializes view and its components.
+     * @param model the reference to GameModel object to get game data from and to update when needed
      */
     public GameView(GameModel model) {
         this.model = model;
@@ -27,11 +28,12 @@ public class GameView extends JPanel {
         this.undoButton = new JButton("Undo Move");
         setLayout(new BorderLayout());
         addStatePanel();
-        addButtons();
+        addButtonPanel();
         setPositions();
     }
+
     /**
-     * 
+     * Adds the state panel to the view. The state panel holds labels to display the current state of the game (whose turn is it, if player has moved, undos remaining).
      */
     private void addStatePanel() {
         this.statePanel = new JPanel(new GridBagLayout());
@@ -60,10 +62,11 @@ public class GameView extends JPanel {
         undosRemainingLabel.setFont(font);
         statePanel.add(undosRemainingLabel, gbc);
     }
+
     /**
-     * 
+     * Adds the action buttons to the view. Has the buttons for confirming a move or undoing a move of a player.
      */
-    private void addButtons() {
+    private void addButtonPanel() {
         JPanel buttonPanel = new JPanel();
         confirmButton.setPreferredSize(new Dimension(200, 50));
         undoButton.setPreferredSize(new Dimension(200, 50));
@@ -71,22 +74,24 @@ public class GameView extends JPanel {
         buttonPanel.add(undoButton);
         add(buttonPanel, BorderLayout.SOUTH);
     }
+
     /**
-     * 
-     * @param listener
+     * Adds an action listener to the confirm button to allow the controller to listen for when the player confirms their move.
+     * @param listener the listener to be added to the confirm button
      */
     public void addConfirmActionListener(ActionListener listener) {
         confirmButton.addActionListener(listener);
     }
     /**
-     * 
-     * @param listener
+     * Adds an action listener to the undo button to allow the controller to listen for when the player undoes their move.
+     * @param listener the listener to be added to the undo button
      */
     public void addUndoActionListener(ActionListener listener) {
         undoButton.addActionListener(listener);
     }
+
     /**
-     * 
+     * Sets the positions of the pits and mancalas on the board.
      */
     private void setPositions() {
         StoneContainer[][] containers = model.getContainers();
@@ -105,8 +110,9 @@ public class GameView extends JPanel {
             }
         }
     }
+
     /**
-     * 
+     * Displays a menu for choosing the style of the board to display in the game.
      */
     public void styleMenu() {
         String[] options = {"Standard", "Party"};
@@ -121,8 +127,9 @@ public class GameView extends JPanel {
         }
         model.setStrategy(strategy);
     }
+
     /**
-     * 
+     * Displays a menu for choosing the number of stones each pit will start with at the beginning of the game.
      */
     public int stonesMenu() {
         String[] options = {"1", "2", "3", "4"};
@@ -133,10 +140,12 @@ public class GameView extends JPanel {
                 null, options, options[0]);
         return choice + 1;
     }
+
     /**
-     * 
+     * Displays a menu with information on the winner and scores at the end of the game, and for choosing whether to restart or exit.
      */
     public void endMenu(int playerAScore, int playerBScore) {
+        // determine message to display based on player score
         String message;
         if (playerAScore == playerBScore) {
             message = "Game tie!";
@@ -160,16 +169,17 @@ public class GameView extends JPanel {
             System.exit(0);
         }
     }
+
     /**
-     * 
+     * Updates the view based on the current game state.
      */
     public void update() {
         // get game state data
         GameModel.GameState gameState = model.getState();
-        int turn = gameState.getTurn();
-        int undosRemaining = gameState.getUndosRemaining();
-        boolean moved = gameState.isMoved();
-        GameModel.MOVE_TYPE moveType = gameState.getMoveType();
+        int turn = gameState.getTurn(); // for turn label
+        int undosRemaining = gameState.getUndosRemaining(); // for undos remaining label and undo button
+        boolean moved = gameState.isMoved(); // for buttons
+        GameModel.MOVE_TYPE moveType = gameState.getMoveType(); // for moved label
         char player = (char) ('A' + turn);
 
         // update labels
@@ -212,11 +222,15 @@ public class GameView extends JPanel {
         draw(g2);
     }
     
+    /**
+     * Draws the board, pits, mancalas, and stones based on the set strategy.
+     * @param g2 the relevant Graphics2D object
+     */
     public void draw(Graphics2D g2) {
         // draw board using strategy
         strategy.drawBoard(g2, getX() + xOffset, getY() + yOffset);
 
-        // draw containers (pits and mancalas) (call strategy from their own draw method)
+        // draw containers (pits and mancalas) (call strategy from their own draw() methods)
         StoneContainer[][] containers = model.getContainers();
         for (int row = 0; row < containers.length; row++) {
             for (int col = 0; col < containers[row].length; col++) {
