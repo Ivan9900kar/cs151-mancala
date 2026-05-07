@@ -31,7 +31,6 @@ public class GameView extends JPanel {
         addButtonPanel();
         setPositions();
     }
-
     /**
      * Adds the state panel to the view. The state panel holds labels to display the current state of the game (whose turn is it, if player has moved, undos remaining).
      */
@@ -62,7 +61,6 @@ public class GameView extends JPanel {
         undosRemainingLabel.setFont(font);
         statePanel.add(undosRemainingLabel, gbc);
     }
-
     /**
      * Adds the action buttons to the view. Has the buttons for confirming a move or undoing a move of a player.
      */
@@ -74,7 +72,6 @@ public class GameView extends JPanel {
         buttonPanel.add(undoButton);
         add(buttonPanel, BorderLayout.SOUTH);
     }
-
     /**
      * Adds an action listener to the confirm button to allow the controller to listen for when the player confirms their move.
      * @param listener the listener to be added to the confirm button
@@ -89,9 +86,10 @@ public class GameView extends JPanel {
     public void addUndoActionListener(ActionListener listener) {
         undoButton.addActionListener(listener);
     }
-
     /**
      * Sets the positions of the pits and mancalas on the board.
+     * Precondition: all StoneContainers in the data array are instantiated
+     * Postcondition: x-coordinates and y-coordinates of all StoneContainers are set
      */
     private void setPositions() {
         StoneContainer[][] containers = model.getContainers();
@@ -110,9 +108,9 @@ public class GameView extends JPanel {
             }
         }
     }
-
     /**
      * Displays a menu for choosing the style of the board to display in the game.
+     * Postcondition: the Style strategy is selected and updates display
      */
     public void styleMenu() {
         String[] options = {"Standard", "Party"};
@@ -127,9 +125,9 @@ public class GameView extends JPanel {
         }
         model.setStrategy(strategy);
     }
-
     /**
      * Displays a menu for choosing the number of stones each pit will start with at the beginning of the game.
+     * @return Returns the integer number of stones per pit at the start of the game
      */
     public int stonesMenu() {
         String[] options = {"1", "2", "3", "4"};
@@ -140,9 +138,9 @@ public class GameView extends JPanel {
                 null, options, options[0]);
         return choice + 1;
     }
-
     /**
      * Displays a menu with information on the winner and scores at the end of the game, and for choosing whether to restart or exit.
+     * Postcondition: Resets game if "Restart" selected; Ends program if "Exit" is selected
      */
     public void endMenu(int playerAScore, int playerBScore) {
         // determine message to display based on player score
@@ -169,7 +167,6 @@ public class GameView extends JPanel {
             System.exit(0);
         }
     }
-
     /**
      * Updates the view based on the current game state.
      */
@@ -213,7 +210,6 @@ public class GameView extends JPanel {
 
         repaint();
     }
-
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -221,7 +217,6 @@ public class GameView extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         draw(g2);
     }
-    
     /**
      * Draws the board, pits, mancalas, and stones based on the set strategy.
      * @param g2 the relevant Graphics2D object

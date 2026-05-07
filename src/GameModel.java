@@ -120,7 +120,6 @@ public class GameModel {
     public GameState getState() {
         return this.state;
     }
-
     /**
      * Getter method for the number of pits.
      * @return the number of pits
@@ -128,7 +127,6 @@ public class GameModel {
     public int getNumPits() {
         return this.numPits;
     }
-
     /**
      * Getter method to access StoneContainer data.
      * @return the matrix of StoneContainer objects (all pits and mancalas)
@@ -136,7 +134,6 @@ public class GameModel {
     public StoneContainer[][] getContainers() {
         return this.containers;
     }
-
     /**
      * Getter method to access current displayed view.
      * @return the current main GameView object
@@ -159,7 +156,6 @@ public class GameModel {
             }
         }
     }
-
     /**
      * Sets the strategy for the board style for all pits and mancalas.
      * @param strategy the strategy object for the board style to be set to
@@ -175,7 +171,6 @@ public class GameModel {
             }
         }
     }
-
     /**
      * Attaches a view to to the model to be notified on any changes.
      * @param view the view to be attached as a listener
@@ -207,7 +202,6 @@ public class GameModel {
             containers[i][containers[i].length - 1] = m;
         }
     }
-
     /**
      * Moves the stones out of the specified pit and places them at each subsequent pit or own mancala counterclockwise on the board.
      * @param col the index of the pit chosen by the player to be the source of the move
@@ -272,7 +266,6 @@ public class GameModel {
         // update view
         updateView();
     }
-
     /**
      * Confirms the move of the current player, ends turn and starts turn of next player
      */
@@ -304,7 +297,6 @@ public class GameModel {
         // update view
         updateView();
     }
-
     /**
      * Undoes the move done by the current player, setting the board back to how it was before the move.
      */
@@ -350,7 +342,6 @@ public class GameModel {
         // update view
         updateView();
     }
-
     /**
      * Called on game end, gathers all stones from players' pits and adds them to their respective mancalas, then calls game end menu.
      */
@@ -368,7 +359,6 @@ public class GameModel {
         // call game end menu with final scores
         currentView.endMenu(containers[0][numPits].getStones(), containers[1][numPits].getStones());
     }
-
     /**
      * Resets the game to the initial state and updates the view.
      * @param numStones the number of stones each pit will start out with
@@ -387,7 +377,6 @@ public class GameModel {
         // update view
         updateView();
     }
-    
     /**
      * Updates any views (the GUI of the game) upon changes, which call this method.
      */
