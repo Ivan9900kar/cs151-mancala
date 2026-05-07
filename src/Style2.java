@@ -11,6 +11,15 @@ public class Style2 implements BoardStyle {
     final double ICON_HEIGHT = 450;
     final double ICON_SEMI = 100;
 
+    /**
+     * Draws a pit with a label.
+     *
+     * @param g2 the graphics context used for drawing
+     * @param x the x-coordinate of the pit
+     * @param y the y-coordinate of the pit
+     * @param row the row index used for labeling
+     * @param col the column index used for labeling
+     */
     public void drawPit(Graphics2D g2, double x, double y, int row, int col) {
         Rectangle2D pit = new Rectangle2D.Double(x, y, ICON_SIZE, ICON_SIZE);
 
