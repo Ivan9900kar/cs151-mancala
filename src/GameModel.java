@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 /**
- * Model class for the Mancala game, representing the state of the game. It holds all of the data of the game as well as the game logic.
+ * Model class for the Mancala game, representing the state of the game. It holds all the data of the game as well as the game logic.
  */
 public class GameModel {
 
@@ -204,7 +204,9 @@ public class GameModel {
     }
     /**
      * Moves the stones out of the specified pit and places them at each subsequent pit or own mancala counterclockwise on the board.
-     * @param col the index of the pit chosen by the player to be the source of the move
+     * @param row the row of the pit chosen by the player to be the source of the move
+     * @param col the column of the pit chosen by the player to be the source of the move
+     * Postcondition: The selected move is modified in data and updated in view. If the row selected is not the player's, this does nothing.
      */
     public void move(int row, int col) {
         // if clicking opponent's containers, exit
@@ -267,7 +269,9 @@ public class GameModel {
         updateView();
     }
     /**
-     * Confirms the move of the current player, ends turn and starts turn of next player
+     * Confirms the move of the current player. The next turn or end game is calculated.
+     * Precondition: a move has been selected
+     * Postcondition: the next move can be selected
      */
     public void confirm() {
         // if player hasn't moved yet, exit
@@ -299,6 +303,9 @@ public class GameModel {
     }
     /**
      * Undoes the move done by the current player, setting the board back to how it was before the move.
+     * Previous board is re-calculated rather than stored.
+     * Precondition: a move has been selected
+     * Postcondition: the move is reverted and a new move can be selected
      */
     public void undo() {
         // if player hasn't moved or instead used up all of their undos, exit
@@ -344,6 +351,8 @@ public class GameModel {
     }
     /**
      * Called on game end, gathers all stones from players' pits and adds them to their respective mancalas, then calls game end menu.
+     * Precondition: all pits on one player's row are empty
+     * Postcondition: remaining stones in pits are added to that player's mancala, then triggers end game menu
      */
     public void gameEnd() {
         // gather remaining stones
@@ -360,8 +369,8 @@ public class GameModel {
         currentView.endMenu(containers[0][numPits].getStones(), containers[1][numPits].getStones());
     }
     /**
-     * Resets the game to the initial state and updates the view.
-     * @param numStones the number of stones each pit will start out with
+     * Resets the game to the initial state and updates the view. Resets the game state.
+     * @param numStones the new number of stones each pit will start out with
      */
     public void reset(int numStones) {
         // reset number of stones in all containers
