@@ -6,7 +6,7 @@ import java.awt.*;
 public class RandomColorFactory {
     /**
      * Draws the shape filled in with the color Gray
-     * @param g2
+     * @param g2 the relevant Graphics2D object
      * @param shape Shape to be drawn
      */
     public static void drawGray(Graphics2D g2, Shape shape) {
@@ -20,7 +20,7 @@ public class RandomColorFactory {
 
     /**
      * Draws the shape filled with a random color and black border
-     * @param g2
+     * @param g2 the relevant Graphics2D object
      * @param shape Shape to be drawn
      */
     public static void drawRandomColor(Graphics2D g2, Shape shape) {
@@ -31,8 +31,8 @@ public class RandomColorFactory {
     }
 
     /**
-     * Random RGB value ranging from 100 to 249
-     * @return 
+     * Generates a random RGB value ranging from 100 to 249
+     * @return the random RGB value
      */
     public static int randomRGB() {
         return (int) (Math.random() * 150) + 100;
