@@ -1,5 +1,8 @@
 import java.awt.*;
 
+/**
+ * Class representing the Mancala for each player. Holds the stones that its player has captured.
+ */
 public class Mancala extends StoneContainer {
     BoardStyle strategy;
     private int row; 

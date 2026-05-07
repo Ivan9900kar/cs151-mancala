@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 /**
- * GameModel is a class taking the role of the Model in MVC, and represents the state of the game. It holds all of the data of the game as well as the game logic.
+ * Model class for the Mancala game, representing the state of the game. It holds all of the data of the game as well as the game logic.
  */
 public class GameModel {
     public final int NUM_PLAYERS = 2; // number of players in the game (currently needs to stay at 2)

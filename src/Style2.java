@@ -1,8 +1,10 @@
 import java.awt.*;
-import java.awt.geom.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * Style 2 for the board using the strategy pattern (Party style).
+ * Affects the appearance of the board, pits, mancalas, and stones.
+ */
 public class Style2 implements BoardStyle {
     final double ICON_SIZE = 100;
     final double ICON_WIDTH = 100;

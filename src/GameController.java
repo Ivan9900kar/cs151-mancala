@@ -1,6 +1,9 @@
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Controller class for the Mancala game, responsible for handling user interactions and updating the model accordingly.
+ */
 public class GameController {
     private final GameModel model;
 

@@ -3,7 +3,8 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
- * 
+ * View class for the Mancala game, responsible for rendering the game board and interface.
+ * Also provides some interaction with the game through menus and buttons (other than what is covered in controller).
  */
 public class GameView extends JPanel {
     private GameModel model;

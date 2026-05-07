@@ -1,6 +1,8 @@
 import java.awt.*;
 
-// strategy pattern for board style (board, pits, mancalas, stones)
+/**
+ * Interface for the strategy pattern to draw board in different styles (board, pits, mancalas, and stones).
+ */
 public interface BoardStyle {
     void drawPit(Graphics2D g2, double x, double y, int row, int col);
     void drawMancala(Graphics2D g2, double x, double y, int row);

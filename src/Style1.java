@@ -2,6 +2,10 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.RoundRectangle2D;
 
+/**
+ * Style 1 for the board using the strategy pattern (Standard style).
+ * Affects the appearance of the board, pits, mancalas, and stones.
+ */
 public class Style1 implements BoardStyle {
     final double ICON_SIZE = 100;
     final double ICON_WIDTH = 100;

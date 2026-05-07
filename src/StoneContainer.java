@@ -1,5 +1,8 @@
 import java.awt.*;
 
+/**
+ * Abstract class representing a container for stones (extends to pit and mancala). Holds a number of stones as well as its position on the board.
+ */
 public abstract class StoneContainer {
     private int stones;
     private double x;

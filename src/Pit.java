@@ -1,5 +1,8 @@
 import java.awt.*;
 
+/**
+ * Class representing a pit on the board. Holds the stones that are currently in the pit.
+ */
 public class Pit extends StoneContainer {
     BoardStyle strategy;
     private int row;
@@ -45,6 +48,7 @@ public class Pit extends StoneContainer {
         return ret;
     }
     public void draw(Graphics2D g2) {
+        // draw pit using strategy pattern
         strategy.drawPit(g2, getX(), getY(), row, col);
     }
 
