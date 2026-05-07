@@ -4,15 +4,43 @@ import java.util.ArrayList;
  * Model class for the Mancala game, representing the state of the game. It holds all of the data of the game as well as the game logic.
  */
 public class GameModel {
-    public final int NUM_PLAYERS = 2; // number of players in the game (currently needs to stay at 2)
-    private StoneContainer[][] containers; // matrix to hold pits and mancala data (holding number of stones in each during game)
-    private int numPits; // number of pits per player (excluding mancala)
-    private ArrayList<GameView> views; // arraylist to hold views to update (listeners)
+
+    // DATA MEMBERS
+
+    /**
+     * number of players in the game (currently needs to stay at 2)
+     */
+    public final int NUM_PLAYERS = 2;
+    /**
+     * matrix to hold pits and mancala data (holding number of stones in each during game)
+     */
+    private StoneContainer[][] containers;
+    /**
+     * number of pits per player (excluding mancala)
+     */
+    private int numPits;
+    /**
+     * arraylist to hold views to update (listeners)
+     */
+    private ArrayList<GameView> views;
+    /**
+     * reference to the current view being displayed (for end menu)
+     */
     private GameView currentView;
-    private GameState state; // inner class object for additional data
-    public enum MOVE_TYPE { // enum for the type of move completed by the player
+    /**
+     * inner class object for additional data
+     */
+    private GameState state;
+    /**
+     * enum for the type of move completed by the player
+     */
+    public enum MOVE_TYPE { 
         NEW_TURN,NORMAL, FREE_TURN, CAPTURE, UNDO, 
     }
+
+
+    // GAMESTATE
+
     /**
      * GameState is an inner class that holds additional data for tracking and preserving the state of the game, apart from the board itself.
      */
@@ -38,6 +66,7 @@ public class GameModel {
             this.moved = false;
             this.moveType = MOVE_TYPE.NEW_TURN;
         }
+        // GameState getters
         public int getTurn() {
             return this.turn;
         }
@@ -54,6 +83,10 @@ public class GameModel {
             return this.endCol;
         }
     }
+
+
+    // CONSTRUCTORS
+
     /**
      * GameModel class constructor, with specification on the number of pits each player will have in the game.
      * @param numPits the number of pits for each player
@@ -67,25 +100,96 @@ public class GameModel {
         defaultView();
         updateView();
     }
+
     /**
-     *
+     * Creates a default view object and attaches it.
      */
-    public void reset(int numStones) {
-        //reset number of stones in all containers
+    private void defaultView() {
+        GameView view = new GameView(this);
+        this.currentView = view;
+        attach(view);
+    }
+
+
+    // GETTERS
+
+    /**
+     * Getter method for the GameState object.
+     * @return the GameState object
+     */
+    public GameState getState() {
+        return this.state;
+    }
+
+    /**
+     * Getter method for the number of pits.
+     * @return the number of pits
+     */
+    public int getNumPits() {
+        return this.numPits;
+    }
+
+    /**
+     * Getter method to access StoneContainer data.
+     * @return the matrix of StoneContainer objects (all pits and mancalas)
+     */
+    public StoneContainer[][] getContainers() {
+        return this.containers;
+    }
+
+    /**
+     * Getter method to access current displayed view.
+     * @return the current main GameView object
+     */
+    public GameView getCurrentView() {
+        return this.currentView;
+    }
+
+
+    // SETTERS
+
+    /**
+     * Sets each pit to start with the specified number of stones.
+     * @param numStones the number of stones each pit will start out with
+     */
+    public void setStartingStones(int numStones) {
         for (StoneContainer[] row : containers) {
-            for (StoneContainer container : row) {
-                container.setStones(0);
+            for (int i = 0; i < numPits; i++) {
+                row[i].setStones(numStones);
             }
         }
-        //new number of starting stones
-        setStartingStones(numStones);
-        //reset game state
-        state = new GameState();
-        //update view
-        updateView();
     }
+
     /**
-     * Initializes the pits and mancalas in the containers matrix.
+     * Sets the strategy for the board style for all pits and mancalas.
+     * @param strategy the strategy object for the board style to be set to
+     */
+    public void setStrategy(BoardStyle strategy) {
+        for (StoneContainer[] row : containers) {
+            for (StoneContainer container : row) {
+                if (container instanceof Pit p) {
+                    p.setStrategy(strategy);
+                } else if (container instanceof Mancala m) {
+                    m.setStrategy(strategy);
+                }
+            }
+        }
+    }
+
+    /**
+     * Attaches a view to to the model to be notified on any changes.
+     * @param view the view to be attached as a listener
+     * @return {@code true} if the view has been successfully added
+     */
+    public boolean attach(GameView view) {
+        return views.add(view);
+    }
+
+
+    // CORE GAME FUNCTIONS
+
+    /**
+     * Initializes the pits and mancalas in the containers matrix with their appropriate row and column.
      */
     private void initContainers() {
         // for each player
@@ -103,68 +207,7 @@ public class GameModel {
             containers[i][containers[i].length - 1] = m;
         }
     }
-    /**
-     * Creates a default view object and attaches it.
-     */
-    private void defaultView() {
-        GameView view = new GameView(this);
-        this.currentView = view;
-        attach(view);
-    }
-    /**
-     * Getter method for the GameState object.
-     */
-    public GameState getState() {
-        return this.state;
-    }
-    /**
-     * Getter method for the number of pits.
-     * @return
-     */
-    public int getNumPits() {
-        return this.numPits;
-    }
-    /**
-     * Getter method to access StoneContainer data.
-     * @return
-     */
-    public StoneContainer[][] getContainers() {
-        return this.containers;
-    }
-    /**
-     * Getter method to access current displayed view.
-     * @return
-     */
-    public GameView getCurrentView() {
-        return this.currentView;
-    }
-    /**
-     * Attaches a view to to the model to be notified on any changes.
-     * @param view the view to be attached as a listener
-     * @return {@code true} if the view has been successfully added
-     */
-    public boolean attach(GameView view) {
-        return views.add(view);
-    }
-    /**
-     * Sets each pit to start with the specified number of stones.
-     * @param numStones the number of stones each pit will start out with
-     */
-    public void setStartingStones(int numStones) {
-        for (StoneContainer[] row : containers) {
-            for (int i = 0; i < numPits; i++) {
-                row[i].setStones(numStones);
-            }
-        }
-    }
-    /**
-     * Updates any views (the GUI of the game) upon changes, which call this method.
-     */
-    public void updateView() {
-        for (GameView view : views) {
-            view.update();
-        }
-    }
+
     /**
      * Moves the stones out of the specified pit and places them at each subsequent pit or own mancala counterclockwise on the board.
      * @param col the index of the pit chosen by the player to be the source of the move
@@ -226,15 +269,14 @@ public class GameModel {
             state.moveType = MOVE_TYPE.FREE_TURN;
         }
 
+        // update view
         updateView();
     }
+
     /**
      * Confirms the move of the current player, ends turn and starts turn of next player
      */
     public void confirm() {
-        // UNCOMMENT FOR TESTING AND DELETE LATER
-        //currentView.endMenu(0, 0);
-        
         // if player hasn't moved yet, exit
         if (!state.moved) return;
 
@@ -249,7 +291,6 @@ public class GameModel {
                 return;
             }
         }
-
         // reset move state
         state.moved = false;
         state.moveType = MOVE_TYPE.NEW_TURN;
@@ -260,10 +301,12 @@ public class GameModel {
             state.turn = (state.turn + 1) % NUM_PLAYERS;
         }
 
+        // update view
         updateView();
     }
+
     /**
-     * Undos the move done by the current player, setting the board back to how it was before the move.
+     * Undoes the move done by the current player, setting the board back to how it was before the move.
      */
     public void undo() {
         // if player hasn't moved or instead used up all of their undos, exit
@@ -299,39 +342,58 @@ public class GameModel {
                 numStones--;
             }
         }
-
+        // set move state to reflect undo
         state.moved = false;
         state.moveType = MOVE_TYPE.UNDO;
         state.undosRemaining--;
 
+        // update view
         updateView();
     }
+
     /**
-     * 
+     * Called on game end, gathers all stones from players' pits and adds them to their respective mancalas, then calls game end menu.
      */
     public void gameEnd() {
+        // gather remaining stones
         for (int i = 0; i < NUM_PLAYERS; i++) {
             Mancala m = (Mancala) containers[i][numPits];
             for (int j = 0; j < numPits; j++) {
                 m.addStones(((Pit) containers[i][j]).takeStones());
             }
         }
+        // update view to reflect gathered stones in mancalas
         updateView();
+
+        // call game end menu with final scores
         currentView.endMenu(containers[0][numPits].getStones(), containers[1][numPits].getStones());
     }
+
     /**
-     * 
-     * @param strategy
+     * Resets the game to the initial state and updates the view.
+     * @param numStones the number of stones each pit will start out with
      */
-    public void setStrategy(BoardStyle strategy) {
+    public void reset(int numStones) {
+        // reset number of stones in all containers
         for (StoneContainer[] row : containers) {
             for (StoneContainer container : row) {
-                if (container instanceof Pit p) {
-                    p.setStrategy(strategy);
-                } else if (container instanceof Mancala m) {
-                    m.setStrategy(strategy);
-                }
+                container.setStones(0);
             }
+        }
+        // new number of starting stones
+        setStartingStones(numStones);
+        // reset game state
+        state = new GameState();
+        // update view
+        updateView();
+    }
+    
+    /**
+     * Updates any views (the GUI of the game) upon changes, which call this method.
+     */
+    public void updateView() {
+        for (GameView view : views) {
+            view.update();
         }
     }
 }
