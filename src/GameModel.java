@@ -68,6 +68,23 @@ public class GameModel {
         updateView();
     }
     /**
+     *
+     */
+    public void reset(int numStones) {
+        //reset number of stones in all containers
+        for (StoneContainer[] row : containers) {
+            for (StoneContainer container : row) {
+                container.setStones(0);
+            }
+        }
+        //new number of starting stones
+        setStartingStones(numStones);
+        //reset game state
+        state = new GameState();
+        //update view
+        updateView();
+    }
+    /**
      * Initializes the pits and mancalas in the containers matrix.
      */
     private void initContainers() {
@@ -113,12 +130,6 @@ public class GameModel {
      */
     public StoneContainer[][] getContainers() {
         return this.containers;
-    }
-    /**
-     * To be implemented
-     */
-    public void setCurrentView() {
-
     }
     /**
      * Getter method to access current displayed view.
@@ -235,7 +246,7 @@ public class GameModel {
             }
             if (sum == 0) {
                 gameEnd();
-                break;
+                return;
             }
         }
 
@@ -299,13 +310,14 @@ public class GameModel {
      * 
      */
     public void gameEnd() {
-        int[] sum = new int[NUM_PLAYERS];
         for (int i = 0; i < NUM_PLAYERS; i++) {
-            for (int j = 0; j < numPits + 1; j++) {
-                sum[i] += containers[i][j].getStones();
+            Mancala m = (Mancala) containers[i][numPits];
+            for (int j = 0; j < numPits; j++) {
+                m.addStones(((Pit) containers[i][j]).takeStones());
             }
         }
-        currentView.endMenu(sum[0], sum[1]);
+        updateView();
+        currentView.endMenu(containers[0][numPits].getStones(), containers[1][numPits].getStones());
     }
     /**
      * 

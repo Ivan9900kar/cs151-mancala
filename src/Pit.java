@@ -46,10 +46,6 @@ public class Pit extends StoneContainer {
     }
     public void draw(Graphics2D g2) {
         strategy.drawPit(g2, getX(), getY(), row, col);
-        
-
-        // draw number of stones in pit
-        super.draw(g2);
     }
 
     public boolean contains(Point p) {

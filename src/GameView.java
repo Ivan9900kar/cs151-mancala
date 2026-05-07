@@ -124,9 +124,13 @@ public class GameView extends JPanel {
      * 
      */
     public int stonesMenu() {
-        String[] options = {"3", "4"};
-        int choice = JOptionPane.showOptionDialog(this, "Set the number of stones per pit to start with:", "Game Initialization", JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-        return choice + 3;
+        String[] options = {"1", "2", "3", "4"};
+        int choice = JOptionPane.showOptionDialog(this, "Set the number of stones per pit to start with:",
+                "Game Initialization",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null, options, options[0]);
+        return choice + 1;
     }
     /**
      * 
@@ -141,10 +145,16 @@ public class GameView extends JPanel {
         }
 
         String[] options = {"Restart", "Exit"};
-        int choice = JOptionPane.showOptionDialog(this, message + "\nPlayer A Score: " + playerAScore + "\nPlayer B Score: " + playerBScore + "\nWould you like to restart game or exit?", "Game End", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+        int choice = JOptionPane.showOptionDialog(this,
+                message + "\nPlayer A Score: " + playerAScore + "\nPlayer B Score: " + playerBScore + "\nWould you like to restart game or exit?",
+                "Game End",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null, options, options[0]);
         if (choice == 0) { 
-            // WRITE RESTART
-            
+            styleMenu();
+            int newStartingStones = stonesMenu();
+            model.reset(newStartingStones);
         } else {
             System.exit(0);
         }
@@ -211,6 +221,7 @@ public class GameView extends JPanel {
             for (int col = 0; col < containers[row].length; col++) {
                 StoneContainer container = containers[row][col];
                 container.draw(g2);
+                strategy.drawStone(g2, container);
             }
         }
     }

@@ -46,7 +46,5 @@ public abstract class StoneContainer {
     public void setY(double y) {
         this.y = y;
     }
-    public void draw(Graphics2D g2) {
-        g2.drawString("" + getStones(), (int) (getX() + 43), (int) (getY() + 55));
-    }
+    public abstract void draw(Graphics2D g2);
 }

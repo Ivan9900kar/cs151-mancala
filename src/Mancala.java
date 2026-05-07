@@ -20,8 +20,5 @@ public class Mancala extends StoneContainer {
     public void draw(Graphics2D g2) {
         // draw mancala using strategy pattern
         strategy.drawMancala(g2, getX(), getY(), row);
-
-        // draw number of stones in mancala
-        super.draw(g2);
     }
 }

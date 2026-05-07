@@ -2,11 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MancalaTest {
+    private static GameView ref;
     public static void main(String[] args) {
         play();
     }
     public static void play() {
-        
         GameModel model = new GameModel(6);
 
         JFrame frame = new JFrame();
@@ -14,6 +14,7 @@ public class MancalaTest {
 
         GameView view = model.getCurrentView();
         frame.add(view, BorderLayout.CENTER);
+        ref = view;
 
         view.styleMenu();
 
