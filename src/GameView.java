@@ -108,7 +108,7 @@ public class GameView extends JPanel {
      * 
      */
     public void styleMenu() {
-        String[] options = {"Style 1", "Style 2"};
+        String[] options = {"Standard", "Party"};
         int choice = JOptionPane.showOptionDialog(this, "Select which style of board to use:", "Board Style Selection", JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
         switch (choice) {
             case 0:

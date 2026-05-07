@@ -12,11 +12,8 @@ public class Style2 implements BoardStyle {
     public void drawPit(Graphics2D g2, double x, double y, int row, int col) {
         Rectangle2D pit = new Rectangle2D.Double(x, y, ICON_SIZE, ICON_SIZE);
 
-        // pit color setup
-        Color temp = g2.getColor();
-        g2.setColor(Color.decode("#dcbc97"));
-        g2.fill(pit);
-        g2.setColor(temp);
+        // pit color
+        RandomColorFactory.drawRandomColor(g2, pit);
 
         // draw pit
         g2.draw(pit);
@@ -32,11 +29,8 @@ public class Style2 implements BoardStyle {
     public void drawMancala(Graphics2D g2, double x, double y, int row) {
         Rectangle2D mancala = new Rectangle2D.Double(x, y, ICON_WIDTH, ICON_HEIGHT);
 
-        // mancala color setup
-        Color temp = g2.getColor();
-        g2.setColor(Color.decode("#dcbc97"));
-        g2.fill(mancala);
-        g2.setColor(temp);
+        // mancala color
+        RandomColorFactory.drawRandomColor(g2, mancala);
 
         // draw mancala
         g2.draw(mancala);
@@ -54,11 +48,8 @@ public class Style2 implements BoardStyle {
 
         Rectangle2D board = new Rectangle2D.Double(x, y, 1250, 550);
 
-        // board color setup
-        Color temp = g2.getColor();
-        g2.setColor(Color.decode("#a06545"));
-        g2.fill(board);
-        g2.setColor(temp);
+        // board color
+        RandomColorFactory.drawRandomColor(g2, board);
 
         // draw board
         g2.draw(board);
@@ -105,13 +96,13 @@ public class Style2 implements BoardStyle {
             case 5:
                 Rectangle2D five = new Rectangle2D.Double(x + 37.5, y + 37.5, 25, 25);
                 RandomColorFactory.drawRandomColor(g2, five);
-                five = new Rectangle2D.Double(x + 15, y + 15, 25, 25);
+                five = new Rectangle2D.Double(x + 12.5, y + 12.5, 25, 25);
                 RandomColorFactory.drawRandomColor(g2, five);
-                five = new Rectangle2D.Double(x + 60, y + 15, 25, 25);
+                five = new Rectangle2D.Double(x + 62.5, y + 12.5, 25, 25);
                 RandomColorFactory.drawRandomColor(g2, five);
-                five = new Rectangle2D.Double(x + 15, y + 60, 25, 25);
+                five = new Rectangle2D.Double(x + 12.5, y + 62.5, 25, 25);
                 RandomColorFactory.drawRandomColor(g2, five);
-                five = new Rectangle2D.Double(x + 60, y + 60, 25, 25);
+                five = new Rectangle2D.Double(x + 62.5, y + 62.5, 25, 25);
                 RandomColorFactory.drawRandomColor(g2, five);
                 break;
             case 6:
