@@ -19,15 +19,18 @@ public class MancalaTest {
      * Creates the model, view, and controller, and displays the game window.
      */
     public static void play() {
+        // view
+        GameView view = new GameView();
+
         // model
-        GameModel model = new GameModel(6);
+        int numPits = view.pitsMenu();
+        GameModel model = new GameModel(numPits);
+        model.attach(view);
 
         // game window
         JFrame frame = new JFrame("Mancala Game (CS 151 - Group 7)");
-        frame.setSize(1500, 800);
-
-        // view
-        GameView view = model.getCurrentView();
+        int width = 200 + (150 * (numPits + 2));
+        frame.setSize(width, 800);
         frame.add(view, BorderLayout.CENTER);
 
         // style setup

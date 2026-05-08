@@ -19,22 +19,19 @@ public class GameView extends JPanel {
     private JLabel undosRemainingLabel;
     private final JButton confirmButton;
     private final JButton undoButton;
-    private final double xOffset = 120;
+    private final double xOffset = 75;
     private final double yOffset = 120;
     BoardStyle strategy;
 
     /**
      * Constructor for GameView, initializes view and its components.
-     * @param model the reference to GameModel object to get game data from and to update when needed
      */
-    public GameView(GameModel model) {
-        this.model = model;
+    public GameView() {
         this.confirmButton = new JButton("Confirm Move");
         this.undoButton = new JButton("Undo Move");
         setLayout(new BorderLayout());
         addStatePanel();
         addButtonPanel();
-        setPositions();
     }
     /**
      * Adds the state panel to the view. The state panel holds labels to display the current state of the game (whose turn is it, if player has moved, undos remaining).
@@ -92,6 +89,14 @@ public class GameView extends JPanel {
         undoButton.addActionListener(listener);
     }
     /**
+     * 
+     * @param model the reference to GameModel object to get game data from and to update when needed
+     */
+    public void setGameModel(GameModel model) {
+        this.model = model;
+        setPositions();
+    }
+    /**
      * Sets the positions of the pits and mancalas on the board.
      * Precondition: all StoneContainers in the data array are instantiated
      * Postcondition: x-coordinates and y-coordinates of all StoneContainers are set
@@ -112,6 +117,18 @@ public class GameView extends JPanel {
                 container.setY(y + yOffset);
             }
         }
+    }
+    /**
+     * 
+     */
+    public int pitsMenu() {
+        String[] options = {"4", "5", "6", "7", "8", "9", "10", "11"};
+        int choice = JOptionPane.showOptionDialog(this, "Set the number pits per player:",
+                "Game Initialization",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null, options, options[0]);
+        return choice + 4;
     }
     /**
      * Displays a menu for choosing the style of the board to display in the game.
@@ -228,7 +245,7 @@ public class GameView extends JPanel {
      */
     public void draw(Graphics2D g2) {
         // draw board using strategy
-        strategy.drawBoard(g2, getX() + xOffset, getY() + yOffset);
+        strategy.drawBoard(g2, getX() + xOffset, getY() + yOffset, model.getNumPits());
 
         // draw containers (pits and mancalas) (call strategy from their own draw() methods)
         StoneContainer[][] containers = model.getContainers();

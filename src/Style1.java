@@ -77,12 +77,13 @@ public class Style1 implements BoardStyle {
      * @param x the x-coordinate of the board
      * @param y the y-coordinate of the board
      */
-    public void drawBoard(Graphics2D g2, double x, double y) {
+    public void drawBoard(Graphics2D g2, double x, double y, double numPits) {
         // board font and thickness
         g2.setFont(new Font("SansSerif", Font.BOLD, 24));
         g2.setStroke(new BasicStroke(2));
 
-        RoundRectangle2D board = new RoundRectangle2D.Double(x, y, 1250, 550, 150, 150);
+        double width = 50 + (150 * (numPits + 2));
+        RoundRectangle2D board = new RoundRectangle2D.Double(x, y, width, 550, 150, 150);
 
         // board color setup
         g2.setColor(Color.decode("#a06545"));

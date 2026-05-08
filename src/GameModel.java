@@ -102,19 +102,7 @@ public class GameModel {
         initContainers();
         this.views = new ArrayList<>();
         this.state = new GameState();
-        defaultView();
-        updateView();
     }
-
-    /**
-     * Creates a default view object and attaches it.
-     */
-    private void defaultView() {
-        GameView view = new GameView(this);
-        this.currentView = view;
-        attach(view);
-    }
-
 
     // GETTERS
 
@@ -151,6 +139,13 @@ public class GameModel {
     // SETTERS
 
     /**
+     * 
+     * @param numPits
+     */
+    public void setNumPits(int numPits) {
+        this.numPits = numPits;
+    }
+    /**
      * Sets each pit to start with the specified number of stones.
      * @param numStones the number of stones each pit will start out with
      */
@@ -182,7 +177,14 @@ public class GameModel {
      * @return {@code true} if the view has been successfully added
      */
     public boolean attach(GameView view) {
-        return views.add(view);
+        boolean added = views.add(view);
+        if (added)
+        {
+            this.currentView = view;
+            currentView.setGameModel(this);
+            updateView();
+        }
+        return added;
     }
 
 
