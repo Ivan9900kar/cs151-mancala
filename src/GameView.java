@@ -123,7 +123,7 @@ public class GameView extends JPanel {
      */
     public int pitsMenu() {
         String[] options = {"4", "5", "6", "7", "8", "9", "10", "11"};
-        int choice = JOptionPane.showOptionDialog(this, "Set the number pits per player:",
+        int choice = JOptionPane.showOptionDialog(this, "Set the number pits per player: \n(Choose 6 pits for default game.)",
                 "Game Initialization",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.PLAIN_MESSAGE,

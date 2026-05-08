@@ -11,6 +11,7 @@ import java.awt.*;
  * Main class to run the Mancala game. Contains the main method and a play method to set up the game.
  */
 public class MancalaTest {
+    private static int numPits = 6;
     public static void main(String[] args) {
         play();
     }
@@ -23,7 +24,7 @@ public class MancalaTest {
         GameView view = new GameView();
 
         // model
-        int numPits = view.pitsMenu();
+        numPits = view.pitsMenu();
         GameModel model = new GameModel(numPits);
         model.attach(view);
 
