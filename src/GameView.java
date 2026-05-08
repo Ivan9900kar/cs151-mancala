@@ -89,8 +89,8 @@ public class GameView extends JPanel {
         undoButton.addActionListener(listener);
     }
     /**
-     * 
-     * @param model the reference to GameModel object to get game data from and to update when needed
+     * Adds a reference of the GameModel object to view to obtain game data from and to update when needed.
+     * @param model the reference to GameModel object
      */
     public void setGameModel(GameModel model) {
         this.model = model;
@@ -119,7 +119,8 @@ public class GameView extends JPanel {
         }
     }
     /**
-     * 
+     * Displays a menu for choosing the number of pits per player to initialize the game wiith.
+     * @return the integer number of pits per player
      */
     public int pitsMenu() {
         String[] options = {"4", "5", "6", "7", "8", "9", "10", "11"};

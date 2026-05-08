@@ -139,13 +139,6 @@ public class GameModel {
     // SETTERS
 
     /**
-     * 
-     * @param numPits
-     */
-    public void setNumPits(int numPits) {
-        this.numPits = numPits;
-    }
-    /**
      * Sets each pit to start with the specified number of stones.
      * @param numStones the number of stones each pit will start out with
      */
@@ -173,6 +166,7 @@ public class GameModel {
     }
     /**
      * Attaches a view to to the model to be notified on any changes.
+     * Sets the current view to the attached view from the most recent call.
      * @param view the view to be attached as a listener
      * @return {@code true} if the view has been successfully added
      */
@@ -192,6 +186,7 @@ public class GameModel {
 
     /**
      * Initializes the pits and mancalas in the containers matrix with their appropriate row and column.
+     * Postcondition: the containers matrix is initialized with containers set to their appropriate row and column.
      */
     private void initContainers() {
         // for each player
