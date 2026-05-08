@@ -414,11 +414,11 @@ public class GameModel {
      * @param numPits the new number of pits each player will have
      * @param numStones the new number of stones each pit will start out with
      */
-    public void reset(int numPits, int numStones) {
+    public void reset(int numStones) {
         // reset number of pits and arrays
-        this.numPits = numPits;
-        containers = new StoneContainer[NUM_PLAYERS][numPits + 1];
-        initContainers();
+        //this.numPits = numPits;
+        //containers = new StoneContainer[NUM_PLAYERS][numPits + 1];
+        //initContainers();
         // reset number of stones in all containers
         for (StoneContainer[] row : containers) {
             for (StoneContainer container : row) {

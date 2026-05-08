@@ -19,6 +19,7 @@ public class Pit extends StoneContainer {
      */
     public Pit() {
         this(0);
+        //this.strategy = new Style1();
     }
 
     /**

@@ -132,6 +132,19 @@ public class GameView extends JPanel {
         return choice + 4;
     }
     /**
+     * Displays a menu for choosing the number of stones each pit will start with at the beginning of the game.
+     * @return Returns the integer number of stones per pit at the start of the game
+     */
+    public int stonesMenu() {
+        String[] options = {"1", "2", "3", "4"};
+        int choice = JOptionPane.showOptionDialog(this, "Choose the number of stones per pit to start with:",
+                "Mancala Game Initialization",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null, options, options[0]);
+        return choice + 1;
+    }
+    /**
      * Displays a menu for choosing the style of the board to display in the game.
      * Precondition: the GameModel data member in GameView is instantiated
      * Postcondition: the Style strategy is selected and updates display
@@ -148,19 +161,6 @@ public class GameView extends JPanel {
                 break;
         }
         model.setStrategy(strategy);
-    }
-    /**
-     * Displays a menu for choosing the number of stones each pit will start with at the beginning of the game.
-     * @return Returns the integer number of stones per pit at the start of the game
-     */
-    public int stonesMenu() {
-        String[] options = {"1", "2", "3", "4"};
-        int choice = JOptionPane.showOptionDialog(this, "Choose the number of stones per pit to start with:",
-                "Mancala Game Initialization",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.PLAIN_MESSAGE,
-                null, options, options[0]);
-        return choice + 1;
     }
     /**
      * Displays a menu with information on the winner and scores at the end of the game, and for choosing whether to restart or exit.
@@ -184,10 +184,12 @@ public class GameView extends JPanel {
                 JOptionPane.PLAIN_MESSAGE,
                 null, options, options[0]);
         if (choice == 0) {
-            int numPits = pitsMenu();
+            //int numPits = pitsMenu();
             int newStartingStones = stonesMenu();
-            model.reset(numPits, newStartingStones);
             styleMenu();
+            //model.reset(numPits, newStartingStones);
+            model.reset(newStartingStones);
+            
         } else {
             System.exit(0);
         }

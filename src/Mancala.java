@@ -18,6 +18,7 @@ public class Mancala extends StoneContainer {
      */
     public Mancala() {
         this(0);
+        //this.strategy = new Style1();
     }
 
     /**
