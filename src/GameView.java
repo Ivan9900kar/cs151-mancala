@@ -124,8 +124,8 @@ public class GameView extends JPanel {
      */
     public int pitsMenu() {
         String[] options = {"4", "5", "6", "7", "8", "9", "10", "11"};
-        int choice = JOptionPane.showOptionDialog(this, "Set the number pits per player: \n(Choose 6 pits for default game.)",
-                "Game Initialization",
+        int choice = JOptionPane.showOptionDialog(this, "Choose the number of pits per player: \n(Choose 6 pits for the default game.)",
+                "Mancala Game Initialization",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.PLAIN_MESSAGE,
                 null, options, options[0]);
@@ -133,11 +133,12 @@ public class GameView extends JPanel {
     }
     /**
      * Displays a menu for choosing the style of the board to display in the game.
+     * Precondition: the GameModel data member in GameView is instantiated
      * Postcondition: the Style strategy is selected and updates display
      */
     public void styleMenu() {
         String[] options = {"Standard", "Party"};
-        int choice = JOptionPane.showOptionDialog(this, "Select which style of board to use:", "Board Style Selection", JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+        int choice = JOptionPane.showOptionDialog(this, "Choose which style of board to use:", "Mancala Game Initialization", JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
         switch (choice) {
             case 0:
                 strategy = new Style1();
@@ -154,8 +155,8 @@ public class GameView extends JPanel {
      */
     public int stonesMenu() {
         String[] options = {"1", "2", "3", "4"};
-        int choice = JOptionPane.showOptionDialog(this, "Set the number of stones per pit to start with:",
-                "Game Initialization",
+        int choice = JOptionPane.showOptionDialog(this, "Choose the number of stones per pit to start with:",
+                "Mancala Game Initialization",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.PLAIN_MESSAGE,
                 null, options, options[0]);
@@ -182,10 +183,11 @@ public class GameView extends JPanel {
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.PLAIN_MESSAGE,
                 null, options, options[0]);
-        if (choice == 0) { 
-            styleMenu();
+        if (choice == 0) {
+            int numPits = pitsMenu();
             int newStartingStones = stonesMenu();
-            model.reset(newStartingStones);
+            model.reset(numPits, newStartingStones);
+            styleMenu();
         } else {
             System.exit(0);
         }

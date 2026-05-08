@@ -13,51 +13,71 @@ public class GameModel {
     // DATA MEMBERS
 
     /**
-     * number of players in the game (currently needs to stay at 2)
+     * Number of players in the game (currently needs to stay at 2)
      */
     public final int NUM_PLAYERS = 2;
     /**
-     * matrix to hold pits and mancala data (holding number of stones in each during game)
+     * Matrix to hold pits and mancala data (holding number of stones in each during game)
      */
     private StoneContainer[][] containers;
     /**
-     * number of pits per player (excluding mancala)
+     * Number of pits per player (excluding mancala)
      */
     private int numPits;
     /**
-     * arraylist to hold views to update (listeners)
+     * ArrayList to hold views to update (listeners)
      */
     private ArrayList<GameView> views;
     /**
-     * reference to the current view being displayed (for end menu)
+     * Reference to the current main view being displayed (for game end menu)
      */
     private GameView currentView;
     /**
-     * inner class object for additional data
+     * Inner class object for additional data
      */
     private GameState state;
     /**
-     * enum for the type of move completed by the player
+     * Enum for the type of move completed by the player
      */
     public enum MOVE_TYPE { 
         NEW_TURN,NORMAL, FREE_TURN, CAPTURE, UNDO, 
     }
-
-
-    // GAMESTATE
-
     /**
      * GameState is an inner class that holds additional data for tracking and preserving the state of the game, apart from the board itself.
      */
     protected class GameState {
-        private int turn; // which player has the turn (also used as iterator / checker for row)
-        private int startCol; // iterator for column in matrix (which pit / mancala)
-        private int endCol; // tracking where iteration ends
-        private int numStones; // how many stones are being moved
-        private int specialSteal; //how stones did the respective player's mancala have before the turn
-        private int undosRemaining; // how many undos the current player has remaining
-        private boolean moved; // whether the player has already moved in their turn
-        private MOVE_TYPE moveType; // what type of move the player has made
+        /**
+         * Which player has the turn (also used as iterator / checker for row)
+         */
+        private int turn;
+        /**
+         * Iterator for column in the container matrix (indicates which pit / mancala)
+         */
+        private int startCol;
+        /**
+         * Tracking where iteration ends
+         */
+        private int endCol;
+        /**
+         * How many stones are being moved
+         */
+        private int numStones;
+        /**
+         * How stones did the respective player's mancala have before the turn
+         */
+        private int specialSteal;
+        /**
+         * How many undos the current player has remaining
+         */
+        private int undosRemaining;
+        /**
+         * Whether the player has already moved in their turn
+         */
+        private boolean moved;
+        /**
+         * What type of move the player has made
+         */
+        private MOVE_TYPE moveType;
         /**
          * GameState class default constructor.
          */
@@ -71,19 +91,38 @@ public class GameModel {
             this.moved = false;
             this.moveType = MOVE_TYPE.NEW_TURN;
         }
-        // GameState getters
+        /**
+         * Getter method for the current turn.
+         * @return an int representing the current turn (0 for player A, 1 player B, etc.)
+         */
         public int getTurn() {
             return this.turn;
         }
+        /**
+         * Getter method for the number of undos remaining.
+         * @return the number of undos remaining
+         */
         public int getUndosRemaining() {
             return this.undosRemaining;
         }
+        /**
+         * Getter method for whether the current player has moved (selected a valid pit)
+         * @return true if moved, false if not
+         */
         public boolean isMoved() {
             return this.moved;
         }
+        /**
+         * Getter method for the type of move most recently processed.
+         * @return the type of move
+         */
         public MOVE_TYPE getMoveType() {
             return this.moveType;
         }
+        /**
+         * Getter method for the column number of the pit that the last stone was placed in after a move.
+         * @return the column of the pit with the last stone
+         */
         public int getEndCol() {
             return this.endCol;
         }
@@ -372,9 +411,14 @@ public class GameModel {
     }
     /**
      * Resets the game to the initial state and updates the view. Resets the game state.
+     * @param numPits the new number of pits each player will have
      * @param numStones the new number of stones each pit will start out with
      */
-    public void reset(int numStones) {
+    public void reset(int numPits, int numStones) {
+        // reset number of pits and arrays
+        this.numPits = numPits;
+        containers = new StoneContainer[NUM_PLAYERS][numPits + 1];
+        initContainers();
         // reset number of stones in all containers
         for (StoneContainer[] row : containers) {
             for (StoneContainer container : row) {

@@ -26,6 +26,8 @@ public class MancalaTest {
         // model
         numPits = view.pitsMenu();
         GameModel model = new GameModel(numPits);
+        int numStones = view.stonesMenu();
+        model.setStartingStones(numStones);
         model.attach(view);
 
         // game window
@@ -36,11 +38,7 @@ public class MancalaTest {
 
         // style setup
         view.styleMenu();
-
-        // number of stones setup
-        int numStones = view.stonesMenu();
-        model.setStartingStones(numStones);
-
+        
         // controller
         new GameController(model, view);
 
